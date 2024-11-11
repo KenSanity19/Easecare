@@ -3,22 +3,7 @@ import { View, Image, Alert, TouchableOpacity, Platform } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import styles from '../styles/loginStyle';
-
-
-const HoverableButton = ({ children, onPress, style, labelStyle, mode }) => {
-    const [isPressed, setIsPressed] = useState(false);
-
-    return (
-        <Button
-            mode={mode}
-            onPress={onPress}
-            style={[style,isPressed && styles.pressedButton,]}
-            labelStyle={labelStyle}
-            onPressIn={() => setIsPressed(true)}
-            onPressOut={() => setIsPressed(false)}>{children}
-        </Button>
-    );
-};
+import HoverableButton from './hoverableButton';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');

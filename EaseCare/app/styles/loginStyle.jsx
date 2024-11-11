@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         backgroundColor: '#007bff',
-        borderRadius: 5,
     },
     pressedButton: {
         backgroundColor: '#D97706', 
@@ -48,6 +47,7 @@ const styles = StyleSheet.create({
     loginButtonText: {
         color: '#ffffff',
         fontWeight: 'bold',
+        textTransform: 'uppercase',
     },
     separator: {
         height: 2, 
