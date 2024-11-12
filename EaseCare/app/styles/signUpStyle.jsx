@@ -9,18 +9,16 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
     sectionHeader: {
         fontSize: 16,
         color: '#D97706',
         fontWeight: '700',
-        marginBottom: 10,
+    },
+    accountDetailsHeader: {
+        fontSize: 16,
+        color: '#D97706',
+        fontWeight: '700',
+        marginTop: 5,
     },
     input: {
         marginBottom: 15,
@@ -36,20 +34,21 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     separator: {
-        height: 2, 
+        height: 1, 
         backgroundColor: 'black', 
         width: '100%',
         marginBottom: 10,
-        borderColor: '#333333', 
+        marginTop: 10,
+        borderColor: '#B8B8B8', 
         borderWidth: 1,
-        opacity: 0.1, 
+
     },
-    registerButton: {
+    nextButton: {
         marginTop: 20,
         backgroundColor: '#007AFF',
         zIndex: 3, 
     },
-    registerButtonText: {
+    nextButtonText: {
         fontSize: 15,
         fontWeight: 'bold',
         textTransform: 'uppercase',
@@ -64,6 +63,7 @@ const styles = StyleSheet.create({
         zIndex: 3, 
     },
     signUpText: {
+        fontSize: 17,
         color: '#D97706',
         fontWeight: 'bold', 
     },

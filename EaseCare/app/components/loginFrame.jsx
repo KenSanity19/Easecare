@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             <TextInput
-                label="Email"
+                label="Email / Username"
                 mode="outlined"
                 value={email}
                 onChangeText={setEmail}
