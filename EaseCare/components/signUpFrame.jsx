@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Text, TextInput, Button, Menu } from 'react-native-paper';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
-import styles from '../styles/signUpStyle';
+import styles from './styles/signUpStyle';
 import HoverableButton from './hoverableButton';
 
 const SignUp = ({ navigation }) => {
@@ -148,8 +148,8 @@ const SignUp = ({ navigation }) => {
 
                 <HoverableButton
                     mode="contained"
-                    style={styles.nextButton}
-                    labelStyle={styles.nextButtonText}
+                    style={styles.registerButton}
+                    labelStyle={styles.registerButtonText}
                     onPress={() => navigation.navigate('SuccessScreen')}>Register
                 </HoverableButton>
 

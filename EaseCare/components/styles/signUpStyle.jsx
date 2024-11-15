@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
 
     },
-    nextButton: {
+    registerButton: {
         marginTop: 20,
-        backgroundColor: '#007AFF',
+        backgroundColor: '#007bff',
         zIndex: 3, 
     },
-    nextButtonText: {
+    registerButtonText: {
         fontSize: 15,
         fontWeight: 'bold',
         textTransform: 'uppercase',

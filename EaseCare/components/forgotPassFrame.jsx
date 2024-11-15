@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Alert, Image } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import styles from '../styles/forgotPassStyle';
+import styles from './styles/forgotPassStyle';
 
 const ForgotPasswordScreen = ({ navigation }) => {
 const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ const [email, setEmail] = useState('');
 
         <View style={styles.logoContainer}>
             <Image
-            source={require('./assets/logo.png')}style={styles.logo}/>
+            source={require('../assets/images/logo.png')}style={styles.logo}/>
         </View>
 
         <Text style={styles.title}>Forgot Password?</Text>

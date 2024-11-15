@@ -63,17 +63,27 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         fontWeight: '500',
     },
-    button: {
-        backgroundColor: '#3B82F6',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        borderRadius: 20,
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginTop: 20,
-        zIndex: 3, // Ensure button is above all elements
+    },
+    button: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 8,
+        marginHorizontal: 15,
+    },
+    signUpButton: {
+        backgroundColor: '#007bff',
+    },
+    logInButton: {
+        backgroundColor: '#007bff',
     },
     buttonText: {
         color: '#FFF',
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
     },

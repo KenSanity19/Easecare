@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, Alert, TouchableOpacity, Platform } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import styles from '../styles/loginStyle';
+import styles from './styles/loginStyle';
 import HoverableButton from './hoverableButton';
 
 const LoginScreen = ({ navigation }) => {
@@ -16,7 +16,7 @@ const LoginScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
-                <Image source={require('./assets/logo.png')} style={styles.logo} />
+                <Image source={require('../assets/images/logo.png')} style={styles.logo} />
                 <Text style={styles.title}>EASECARE</Text>
             </View>
 
