@@ -14,7 +14,6 @@ const Stack = createStackNavigator();
 export default function App() {
     return (
         <PaperProvider>
-            <NavigationContainer>
                 <Stack.Navigator initialRouteName="Welcome">
                     <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
@@ -23,7 +22,6 @@ export default function App() {
                     <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{ headerShown: false }} />
                 </Stack.Navigator>
-            </NavigationContainer>
         </PaperProvider>
     );
 }
