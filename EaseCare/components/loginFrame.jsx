@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
                 mode="contained"
                 style={styles.loginButton}
                 labelStyle={styles.loginButtonText}
-                onPress={() => Alert.alert('Log In', 'Success!')}>Log In
+                onPress={() => navigation.navigate('ServicesScreen')}>Log In
             </HoverableButton>
             <View style={styles.separator} />
 

@@ -26,23 +26,31 @@ const ServicesScreen = ({ navigation }) => {
 
             {/* Services Grid */}
             <View style={styles.gridContainer}>
-                <TouchableOpacity style={[styles.card, styles.blueCard]}>
-                    <Image source={require('../assets/images/dentalCare.jpg')} style={styles.cardImage} />
+                <TouchableOpacity
+                    style={[styles.card, styles.blueCard]}
+                    onPress={() => navigation.navigate("DentalCareScreen")}>
+                    <Image source={require("../assets/images/dentalCare.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Dental Care</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.card, styles.blueCard]}>
-                    <Image source={require('../assets/images/beautyParlour.jpg')} style={styles.cardImage} />
+                <TouchableOpacity
+                    style={[styles.card, styles.blueCard]}
+                    onPress={() => navigation.navigate("BeautyParlour")}>
+                    <Image source={require("../assets/images/beautyParlour.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Beauty Parlour</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.card, styles.orangeCard]}>
-                    <Image source={require('../assets/images/nailTreatment.jpg')} style={styles.cardImage} />
+                <TouchableOpacity
+                    style={[styles.card, styles.orangeCard]}
+                    onPress={() => navigation.navigate("NailTreatment")}>
+                    <Image source={require("../assets/images/nailTreatment.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Nail Treatments</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.card, styles.orangeCard]}>
-                    <Image source={require('../assets/images/massage.jpg')} style={styles.cardImage} />
+                <TouchableOpacity
+                    style={[styles.card, styles.orangeCard]}
+                    onPress={() => navigation.navigate("Massage")}>
+                    <Image source={require("../assets/images/massage.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Massage</Text>
                 </TouchableOpacity>
             </View>
