@@ -1,17 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import styles from './styles/dentalCareStyle';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import styles from './styles/nailTreatmentStyle';
 
-const DentalCareScreen = ({ navigation }) => {
+const NailTreatmentScreen = ({ navigation }) => {
     const treatments = [
-        "Dental Implants",
-        "Dentures",
-        "Root Canal",
-        "Veneers",
-        "Tooth Extraction",
-        "Teeth Whitening",
-        "Fillings and Restoration",
-        "Dental Cleaning and Polishing",
+        "Manicure",
+        "Pedicure",
+        "Nail Extensions",
+        "Nail Repairs",
+        "Cuticle Care",
     ];
 
     return (
@@ -33,23 +30,32 @@ const DentalCareScreen = ({ navigation }) => {
             {/* Content */}
             <View>
                 {/* Question */}
-                <Text style={styles.question}>What type of dental treatments do you like?</Text>
+                <Text style={styles.question}>What type of nail treatment do you like?</Text>
 
                 {/* Services Grid */}
                 <View style={styles.gridContainer}>
-                    {treatments.map((treatment, index) => (
+                    {treatments.slice(0, 4).map((treatment, index) => (
                         <TouchableOpacity
                             key={index}
                             style={styles.card}
                             onPress={() => navigation.navigate('BookingFrame', { treatment })}>
-                        <Text style={styles.cardText}>{treatment}</Text>
-                    </TouchableOpacity>
+                            <Text style={styles.cardText}>{treatment}</Text>
+                        </TouchableOpacity>
                     ))}
+                </View>
+
+                {/* Center the Cuticle Care */}
+                <View style={{ alignItems: 'center', marginTop: 10 }}>
+                    <TouchableOpacity
+                        style={[styles.card, { width: '60%' }]} 
+                        onPress={() => navigation.navigate('BookingFrame', { treatment: treatments[4] })}>
+                        <Text style={styles.cardText}>{treatments[4]}</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Logo */}
                 <Image
-                    source={require('../assets/images/dentalCareLogo.png')}
+                    source={require('../assets/images/nailTreatmentLogo.png')}
                     style={styles.logo}
                     resizeMode="contain"
                 />
@@ -58,4 +64,4 @@ const DentalCareScreen = ({ navigation }) => {
     );
 };
 
-export default DentalCareScreen;
+export default NailTreatmentScreen;

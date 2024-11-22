@@ -8,6 +8,9 @@ import ForgotPasswordScreen from '../components/forgotPassFrame';
 import SuccessScreen from '../components/signUpSuccess';
 import ServicesScreen from '../components/servicesFrame';
 import DentalCareScreen from '../components/dentalCareFrame';
+import BeautyParlourScreen from '../components/beautyParlourFrame';
+import NailTreatmentScreen from '../components/nailTreatmentFrame';
+import HealthWellnessScreen from '../components/healthWellnessFrame';
 
 
 const Stack = createStackNavigator();
@@ -35,6 +38,9 @@ export default function App() {
                     <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="ServicesScreen" component={ServicesScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="DentalCareScreen" component={DentalCareScreen} options={{ title: 'Dental Care' }} />
+                    <Stack.Screen name="BeautyParlourScreen" component={BeautyParlourScreen} options={{ title: 'Beauty Parlour' }} />
+                    <Stack.Screen name="NailTreatmentScreen" component={NailTreatmentScreen} options={{ title: 'Nail Treatment' }} />
+                    <Stack.Screen name="HealthWellnessScreen" component={HealthWellnessScreen} options={{ title: 'Health and Wellness' }} />
                 </Stack.Navigator>
         </PaperProvider>
     );

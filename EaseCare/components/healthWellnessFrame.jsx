@@ -1,17 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import styles from './styles/dentalCareStyle';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import styles from './styles/healthWellnessStyle';
 
-const DentalCareScreen = ({ navigation }) => {
+const HealthWellnessScreen = ({ navigation }) => {
     const treatments = [
-        "Dental Implants",
-        "Dentures",
-        "Root Canal",
-        "Veneers",
-        "Tooth Extraction",
-        "Teeth Whitening",
-        "Fillings and Restoration",
-        "Dental Cleaning and Polishing",
+        "Physical Therapy",
+        "Massage Therapy",
+        "Massage Therapy",
+        "Mental Health Counseling",
+        "Fitness and Exercise Program",
+        "Companion Care Services",
     ];
 
     return (
@@ -33,7 +31,7 @@ const DentalCareScreen = ({ navigation }) => {
             {/* Content */}
             <View>
                 {/* Question */}
-                <Text style={styles.question}>What type of dental treatments do you like?</Text>
+                <Text style={styles.question}>What type of health and wellness service do you like?</Text>
 
                 {/* Services Grid */}
                 <View style={styles.gridContainer}>
@@ -49,7 +47,7 @@ const DentalCareScreen = ({ navigation }) => {
 
                 {/* Logo */}
                 <Image
-                    source={require('../assets/images/dentalCareLogo.png')}
+                    source={require('../assets/images/healthWellnessLogo.png')}
                     style={styles.logo}
                     resizeMode="contain"
                 />
@@ -58,4 +56,4 @@ const DentalCareScreen = ({ navigation }) => {
     );
 };
 
-export default DentalCareScreen;
+export default HealthWellnessScreen;

@@ -63,10 +63,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     logo: {
-        marginTop: -20,
         width: 320,
         height: 250,
-        marginLeft: 22,
         alignSelf: 'center',
     },
 });

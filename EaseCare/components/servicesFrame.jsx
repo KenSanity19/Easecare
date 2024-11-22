@@ -35,23 +35,23 @@ const ServicesScreen = ({ navigation }) => {
 
                 <TouchableOpacity
                     style={[styles.card, styles.blueCard]}
-                    onPress={() => navigation.navigate("BeautyParlour")}>
+                    onPress={() => navigation.navigate("BeautyParlourScreen")}>
                     <Image source={require("../assets/images/beautyParlour.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Beauty Parlour</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.card, styles.orangeCard]}
-                    onPress={() => navigation.navigate("NailTreatment")}>
+                    onPress={() => navigation.navigate("NailTreatmentScreen")}>
                     <Image source={require("../assets/images/nailTreatment.jpg")} style={styles.cardImage} />
-                    <Text style={styles.cardText}>Nail Treatments</Text>
+                    <Text style={styles.cardText}>Nail Treatment</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.card, styles.orangeCard]}
-                    onPress={() => navigation.navigate("Massage")}>
-                    <Image source={require("../assets/images/massage.jpg")} style={styles.cardImage} />
-                    <Text style={styles.cardText}>Massage</Text>
+                    onPress={() => navigation.navigate("HealthWellnessScreen")}>
+                    <Image source={require("../assets/images/healthWellness.jpeg")} style={styles.cardImage} />
+                    <Text style={styles.cardText}>Health and Wellness</Text>
                 </TouchableOpacity>
             </View>
 
