@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "EaseCare",
-    "slug": "EaseCare",
+    "slug": "easecare",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "myapp",
@@ -11,16 +11,18 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.peaceandlove.EaseCare"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.peaceandlove.EaseCare"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "static"
     },
     "plugins": [
       "expo-router",
@@ -28,6 +30,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d4e95068-6c54-413e-a9f7-dcfd0a6848f2"
+      }
+    },
+    "owner": "kensanity19"
   }
 }

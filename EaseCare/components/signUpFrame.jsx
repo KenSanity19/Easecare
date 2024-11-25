@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { Text, TextInput, Button, Menu } from 'react-native-paper';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import styles from './styles/signUpStyle';
 import HoverableButton from './hoverableButton';
+import { getDatabase, ref, set } from 'firebase/database';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import firebaseApp from '../app/firebaseConfig'; 
 
 const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -23,9 +26,48 @@ const SignUp = ({ navigation }) => {
     const [disabilityDurationMenuVisible, setDisabilityDurationMenuVisible] = useState(false);
 
     const handleFilePicker = async () => {
-        let result = await DocumentPicker.getDocumentAsync({});
-        if (result.type === 'success') {
-            setPwdIdFile(result);
+        try {
+            let result = await DocumentPicker.getDocumentAsync({});
+            if (result.type === 'success') {
+                setPwdIdFile(result);
+            } else {
+                Alert.alert('File Selection Cancelled');
+            }
+        } catch (error) {
+            console.error('File Picker Error:', error);
+            Alert.alert('Error', 'Unable to pick file. Please try again.');
+        }
+    };
+
+    const handleRegister = async () => {
+        if (!name || !username || !password) {
+            Alert.alert('Error', 'Please fill in all required fields: Name, Username, and Password.');
+            return;
+        }
+
+        try {
+            const auth = getAuth(firebaseApp);
+            const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+            const userId = userCredential.user.uid;
+
+            const db = getDatabase(firebaseApp);
+            await set(ref(db, 'users/' + userId), {
+                name,
+                age,
+                sex,
+                disabilityType,
+                disabilityDuration,
+                contact,
+                address,
+                username,
+                pwdIdFile: pwdIdFile?.name || null,
+            });
+
+            Alert.alert('Success', 'Registration successful!');
+            navigation.navigate('SuccessScreen');
+        } catch (error) {
+            console.error('Registration Error:', error);
+            Alert.alert('Error', error.message || 'An error occurred during registration.');
         }
     };
 
@@ -40,9 +82,9 @@ const SignUp = ({ navigation }) => {
                     value={name}
                     onChangeText={setName}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}/>
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
+                />
 
-                {/* Age and Sex Row */}
                 <View style={styles.row}>
                     <TextInput
                         label="Age"
@@ -50,8 +92,9 @@ const SignUp = ({ navigation }) => {
                         value={age}
                         onChangeText={setAge}
                         keyboardType="numeric"
-                        style={[styles.input, styles.halfInput, styles.ageInput]}
-                        left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}/>
+                        style={[styles.input, styles.halfInput]}
+                        left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}
+                    />
 
                     <Menu
                         visible={sexMenuVisible}
@@ -61,16 +104,18 @@ const SignUp = ({ navigation }) => {
                                 label="Sex"
                                 mode="outlined"
                                 value={sex}
-                                style={[styles.input, styles.halfInput, styles.sexInput]}
+                                style={[styles.input, styles.halfInput]}
                                 left={<TextInput.Icon icon={() => <Ionicons name="transgender" size={20} color="#6e6e6e" />} />}
-                                right={<TextInput.Icon icon="menu-down" onPress={() => setSexMenuVisible(true)} />}/>}>
+                                right={<TextInput.Icon icon="menu-down" onPress={() => setSexMenuVisible(true)} />}
+                            />
+                        }
+                    >
                         <Menu.Item onPress={() => { setSex('Male'); setSexMenuVisible(false); }} title="Male" />
                         <Menu.Item onPress={() => { setSex('Female'); setSexMenuVisible(false); }} title="Female" />
                         <Menu.Item onPress={() => { setSex('Other'); setSexMenuVisible(false); }} title="Other" />
                     </Menu>
                 </View>
 
-                {/* Disability Type Dropdown */}
                 <Menu
                     visible={disabilityTypeMenuVisible}
                     onDismiss={() => setDisabilityTypeMenuVisible(false)}
@@ -81,14 +126,16 @@ const SignUp = ({ navigation }) => {
                             value={disabilityType}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="accessibility" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityTypeMenuVisible(true)} />}/>}>
+                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityTypeMenuVisible(true)} />}
+                        />
+                    }
+                >
                     <Menu.Item onPress={() => { setDisabilityType('Visual Impairment'); setDisabilityTypeMenuVisible(false); }} title="Visual Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Hearing Impairment'); setDisabilityTypeMenuVisible(false); }} title="Hearing Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Mobility Impairment'); setDisabilityTypeMenuVisible(false); }} title="Mobility Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Cognitive Impairment'); setDisabilityTypeMenuVisible(false); }} title="Cognitive Impairment" />
                 </Menu>
 
-                {/* Disability Duration Dropdown */}
                 <Menu
                     visible={disabilityDurationMenuVisible}
                     onDismiss={() => setDisabilityDurationMenuVisible(false)}
@@ -99,7 +146,9 @@ const SignUp = ({ navigation }) => {
                             value={disabilityDuration}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="time" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityDurationMenuVisible(true)} />}/>}>
+                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityDurationMenuVisible(true)} />}
+                        />
+                    }>
                     <Menu.Item onPress={() => { setDisabilityDuration('Less than a year'); setDisabilityDurationMenuVisible(false); }} title="Less than a year" />
                     <Menu.Item onPress={() => { setDisabilityDuration('1-3 years'); setDisabilityDurationMenuVisible(false); }} title="1-3 years" />
                     <Menu.Item onPress={() => { setDisabilityDuration('3-5 years'); setDisabilityDurationMenuVisible(false); }} title="3-5 years" />
@@ -113,24 +162,26 @@ const SignUp = ({ navigation }) => {
                     onChangeText={setContact}
                     keyboardType="phone-pad"
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="call" size={20} color="#6e6e6e" />} />}/>
+                    left={<TextInput.Icon icon={() => <Ionicons name="call" size={20} color="#6e6e6e" />} />}
+                />
                 <TextInput
                     label="Address"
                     mode="outlined"
                     value={address}
                     onChangeText={setAddress}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="home" size={20} color="#6e6e6e" />} />}/>
+                    left={<TextInput.Icon icon={() => <Ionicons name="home" size={20} color="#6e6e6e" />} />}
+                />
 
                 <Text style={styles.accountDetailsHeader}>Account Details:</Text>
-                {/* Username and Password Fields */}
                 <TextInput
                     label="Username"
                     mode="outlined"
                     value={username}
                     onChangeText={setUsername}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}/>
+                    left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}
+                />
                 <TextInput
                     label="Password"
                     mode="outlined"
@@ -138,26 +189,28 @@ const SignUp = ({ navigation }) => {
                     onChangeText={setPassword}
                     secureTextEntry
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}/>
+                    left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}
+                />
 
-                <Text style={styles.fileUploadText}>Upload your PWD ID here: </Text>
+                <Text style={styles.fileUploadText}>Upload your PWD ID here:</Text>
                 <Button mode="outlined" onPress={handleFilePicker} style={styles.fileButton}>Choose File</Button>
                 {pwdIdFile && <Text style={styles.fileText}>{pwdIdFile.name}</Text>}
-
-                <View style={styles.separator} />
 
                 <HoverableButton
                     mode="contained"
                     style={styles.registerButton}
                     labelStyle={styles.registerButtonText}
-                    onPress={() => navigation.navigate('SuccessScreen')}>Register
+                    onPress={handleRegister}
+                >
+                    Register
                 </HoverableButton>
 
                 <Button
                     mode="text"
                     style={styles.loginRedirectButton}
-                    labelStyle={{ color: 'black' }}
-                    onPress={() => navigation.navigate('LoginScreen')}>Already have an account? <Text style={styles.signUpText}>Login</Text>
+                    onPress={() => navigation.navigate('LoginScreen')}
+                >
+                    Already have an account? Login here.
                 </Button>
             </View>
         </ScrollView>
