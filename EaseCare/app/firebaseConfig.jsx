@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
@@ -11,9 +13,17 @@ const firebaseConfig = {
     databaseURL: "https://easecare-b2f60-default-rtdb.firebaseio.com/",
 };
 
-
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
+// Initialize Firebase Auth with persistence
+const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+
+// Initialize Firebase Database
 export const database = getDatabase(app);
 
-export default app;
+export { auth, app };
+
+export default firebaseConfig;

@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { View, Image, Alert, TouchableOpacity } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; // Import Firebase Auth
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Firebase Auth import
+import { auth } from '../app/firebaseConfig';
+import * as Facebook from 'expo-facebook';
 import styles from './styles/loginStyle';
 import HoverableButton from './hoverableButton';
 
@@ -15,17 +17,16 @@ const LoginScreen = ({ navigation }) => {
             Alert.alert('Error', 'Please fill in both email and password.');
             return;
         }
-    
+
         try {
-            const auth = getAuth(); // Initialize Firebase Auth
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password); // Use the imported `auth`
             const user = userCredential.user;
-    
+
             Alert.alert('Success', `Welcome back, ${user.email}!`);
             navigation.navigate('ServicesScreen'); // Redirect to the services screen
         } catch (error) {
             console.error(error);
-    
+
             // Map error codes to user-friendly messages
             let errorMessage = '';
             switch (error.code) {
@@ -48,12 +49,37 @@ const LoginScreen = ({ navigation }) => {
                     errorMessage = 'An unknown error occurred. Please try again.';
                     break;
             }
-    
+
             // Show the error message
             Alert.alert('Login Failed', errorMessage);
         }
     };
-    
+
+    // Handle Facebook Login
+    const handleFacebookLogin = async () => {
+        try {
+            // Ensure initialization only happens once
+            await Facebook.initializeAsync({
+                appId: '935984145151270', // Replace with your Facebook app ID
+            });
+
+            const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+                permissions: ['public_profile', 'email'],
+            });
+
+            if (type === 'success') {
+                // Do something with the token (e.g., send it to your backend or Firebase)
+                console.log('Facebook login successful, token:', token);
+                Alert.alert('Success', 'Facebook login successful');
+                navigation.navigate('ServicesScreen'); // Redirect to the services screen
+            } else {
+                Alert.alert('Login Failed', 'Facebook login was cancelled.');
+            }
+        } catch (error) {
+            console.error('Facebook Login Error:', error);
+            Alert.alert('Login Failed', 'There was an issue with Facebook login.');
+        }
+    };
 
     const handleBiometricsLogin = () => {
         // Biometric login logic placeholder
@@ -116,7 +142,7 @@ const LoginScreen = ({ navigation }) => {
                 </TouchableOpacity>
                 <Text style={styles.orText}>OR</Text>
                 <View style={styles.socialButtonsContainer}>
-                    <TouchableOpacity style={styles.socialButton}>
+                    <TouchableOpacity style={styles.socialButton} onPress={handleFacebookLogin}>
                         <FontAwesome name="facebook" size={24} color="#3b5998" />
                         <Text style={styles.socialButtonText}>Facebook</Text>
                     </TouchableOpacity>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
+import './firebaseConfig';
 import WelcomeScreen from '../components/welcomeFrame';
 import SignUp from '../components/signUpFrame';
 import LoginScreen from '../components/loginFrame';

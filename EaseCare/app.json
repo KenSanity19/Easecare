@@ -26,18 +26,22 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-facebook"
     ],
-    "experiments": {
-      "typedRoutes": true
-    },
     "extra": {
+      "facebookAppId": "935984145151270",
+      "facebookDisplayName": "EaseCare",
+      "facebookScheme": "fb935984145151270",
       "router": {
         "origin": false
       },
       "eas": {
         "projectId": "d4e95068-6c54-413e-a9f7-dcfd0a6848f2"
       }
+    },
+    "experiments": {
+      "typedRoutes": true
     },
     "owner": "kensanity19"
   }

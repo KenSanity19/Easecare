@@ -6,8 +6,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import styles from './styles/signUpStyle';
 import HoverableButton from './hoverableButton';
 import { getDatabase, ref, set } from 'firebase/database';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import firebaseApp from '../app/firebaseConfig'; 
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../app/firebaseConfig'; 
 
 const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -46,11 +46,12 @@ const SignUp = ({ navigation }) => {
         }
 
         try {
-            const auth = getAuth(firebaseApp);
+            // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, username, password);
             const userId = userCredential.user.uid;
 
-            const db = getDatabase(firebaseApp);
+            // Save user details in Realtime Database
+            const db = getDatabase(); // Use the default initialized Firebase app
             await set(ref(db, 'users/' + userId), {
                 name,
                 age,
@@ -67,7 +68,28 @@ const SignUp = ({ navigation }) => {
             navigation.navigate('SuccessScreen');
         } catch (error) {
             console.error('Registration Error:', error);
-            Alert.alert('Error', error.message || 'An error occurred during registration.');
+
+            // Display user-friendly error messages
+            let errorMessage = '';
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    errorMessage = 'This email is already in use. Please try another.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'The email address is not valid.';
+                    break;
+                case 'auth/operation-not-allowed':
+                    errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+                    break;
+                case 'auth/weak-password':
+                    errorMessage = 'The password is too weak. Please choose a stronger password.';
+                    break;
+                default:
+                    errorMessage = error.message || 'An error occurred during registration.';
+                    break;
+            }
+
+            Alert.alert('Error', errorMessage);
         }
     };
 
