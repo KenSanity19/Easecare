@@ -57,11 +57,11 @@ const ServicesScreen = ({ navigation }) => {
 
             {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
-                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HomePage')}>
                     <Image source={require('../assets/icons/home.png')} style={styles.navIcon} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Services')}>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('ServicesScreen')}>
                     <Image source={require('../assets/icons/services.png')} style={styles.navIcon} />
                     <Text style={styles.navText}>Services</Text>
                 </TouchableOpacity>

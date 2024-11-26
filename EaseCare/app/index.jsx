@@ -12,6 +12,7 @@ import DentalCareScreen from '../components/dentalCareFrame';
 import BeautyParlourScreen from '../components/beautyParlourFrame';
 import NailTreatmentScreen from '../components/nailTreatmentFrame';
 import HealthWellnessScreen from '../components/healthWellnessFrame';
+import HomePage from '../components/home';
 
 const Stack = createStackNavigator();
 
@@ -30,11 +31,11 @@ export default function App() {
                         },
                         headerTintColor: '#333333', 
                     }}>
-                    
-                    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+                    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />     
+                    <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />        
                     <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
                     <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="ServicesScreen" component={ServicesScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="DentalCareScreen" component={DentalCareScreen} options={{ title: 'Dental Care' }} />
