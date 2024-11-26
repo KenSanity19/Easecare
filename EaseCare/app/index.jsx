@@ -13,7 +13,6 @@ import BeautyParlourScreen from '../components/beautyParlourFrame';
 import NailTreatmentScreen from '../components/nailTreatmentFrame';
 import HealthWellnessScreen from '../components/healthWellnessFrame';
 
-
 const Stack = createStackNavigator();
 
 export default function App() {
