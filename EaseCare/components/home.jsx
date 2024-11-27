@@ -16,11 +16,16 @@ const HomePage = ({ navigation }) => {
 
                 {/* Package Services Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Package Services</Text>
-                    <Image
-                        source={require('../assets/images/nailsDental.png')}
-                        style={styles.packageImage}
-                    />
+                    
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate("ServicesScreen")}>
+                        <Text style={styles.sectionTitle}>Package Services</Text>
+                        <Image
+                            source={require('../assets/images/nailsDental.png')}
+                            style={styles.packageImage}/>
+                    </TouchableOpacity>
+
+                        
                     <Text style={styles.packageDescription}>
                         Nails Treatments and Dental Care
                     </Text>
@@ -30,13 +35,18 @@ const HomePage = ({ navigation }) => {
                 <View style={styles.section}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>The most booked services</Text>
-                        <TouchableOpacity>
-                            <Text style={styles.seeAllText}>See all</Text>
+
+                        <TouchableOpacity 
+                            onPress={() => navigation.navigate("ServicesScreen")}>
+                            <Text style={styles.seeAllText}>See All</Text>
                         </TouchableOpacity>
+
+                        
                     </View>
                     <View style={styles.serviceRow}>
                         <View style={styles.serviceCard}>
                             <Image
+                                
                                 source={require('../assets/images/massage.png')}
                                 style={styles.serviceImage}
                             />
