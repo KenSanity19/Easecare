@@ -46,6 +46,7 @@ sectionHeader: {
 },
 seeAllText: {
     color: '#007bff',
+    padding: 10 ,
 },
 serviceRow: {
     flexDirection: 'row',
