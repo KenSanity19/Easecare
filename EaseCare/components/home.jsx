@@ -18,7 +18,7 @@ const HomePage = ({ navigation }) => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Package Services</Text>
                     <Image
-                        source={require('../assets/images/servicesLeft.png')}
+                        source={require('../assets/images/nailsDental.png')}
                         style={styles.packageImage}
                     />
                     <Text style={styles.packageDescription}>
@@ -37,14 +37,14 @@ const HomePage = ({ navigation }) => {
                     <View style={styles.serviceRow}>
                         <View style={styles.serviceCard}>
                             <Image
-                                source={require('../assets/images/servicesLeft.png')}
+                                source={require('../assets/images/massage.png')}
                                 style={styles.serviceImage}
                             />
                             <Text style={styles.serviceText}>Massage</Text>
                         </View>
                         <View style={styles.serviceCard}>
                             <Image
-                                source={require('../assets/images/servicesLeft.png')}
+                                source={require('../assets/images/beauty.png')}
                                 style={styles.serviceImage}
                             />
                             <Text style={styles.serviceText}>Beauty Parlour</Text>
