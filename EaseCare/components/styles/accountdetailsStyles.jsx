@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const { width } = Dimensions.get('window'); // Get device width
 const styles = StyleSheet.create({
     container: {
       flex: 1,

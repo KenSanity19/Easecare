@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        
+        
     },
     halfInput: {
         flex: 1,

@@ -85,11 +85,7 @@ const SignUp = ({ navigation }) => {
             Alert.alert('Error', 'Password is required.');
             return;
         }
-        if (!pwdIdFile) {
-            Alert.alert('Error', 'Please upload your PWD ID.');
-            return;
-        }
-    
+
         try {
             // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, username, password);
@@ -97,7 +93,7 @@ const SignUp = ({ navigation }) => {
     
             // Save user details in Firebase Realtime Database
             const db = getDatabase();
-            await set(ref(db, 'users/' + userId), {
+            await set(ref(db, 'tbl_customer/' + userId), {
                 firstName,
                 middleName,
                 lastName,
@@ -178,7 +174,7 @@ const SignUp = ({ navigation }) => {
                         value={age}
                         onChangeText={setAge}
                         keyboardType="numeric"
-                        style={[styles.input, styles.halfInput]}
+                        style={[styles.input, styles.halfInput, { marginRight: 20 }]} 
                         left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}
                     />
                     <Menu
@@ -188,10 +184,11 @@ const SignUp = ({ navigation }) => {
                             <TextInput
                                 label="Sex"
                                 mode="outlined"
+                                editable={false}
                                 value={sex}
                                 style={[styles.input, styles.halfInput]}
                                 left={<TextInput.Icon icon={() => <Ionicons name="transgender" size={20} color="#6e6e6e" />} />}
-                                right={<TextInput.Icon icon="menu-down" onPress={() => setSexMenuVisible(true)} />}
+                                right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setSexMenuVisible(true)} />}
                             />
                         }
                     >
@@ -208,10 +205,11 @@ const SignUp = ({ navigation }) => {
                         <TextInput
                             label="Type of Disability"
                             mode="outlined"
+                            editable={false}
                             value={disabilityType}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="accessibility" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityTypeMenuVisible(true)} />}
+                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityTypeMenuVisible(true)} />}
                         />
                     }
                 >
@@ -228,10 +226,11 @@ const SignUp = ({ navigation }) => {
                         <TextInput
                             label="How long have you been disabled"
                             mode="outlined"
+                            editable={false}
                             value={disabilityDuration}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="time" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityDurationMenuVisible(true)} />}
+                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityDurationMenuVisible(true)} />}
                         />
                     }
                 >
