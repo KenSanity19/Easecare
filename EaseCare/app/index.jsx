@@ -21,6 +21,7 @@ import ChangePasswordScreen from '../components/changepass';
 import PassSuccessScreen from '../components/changepassSucc';
 import AccountDetailsScreen from '../components/accountdetails';
 import FeedbackScreen from '../components/feedback';
+import FeedbackSuccessScreen from '../components/FeedbackSuccess';
 
 const Stack = createStackNavigator();
 
@@ -58,7 +59,7 @@ export default function App() {
                     <Stack.Screen name="PassSuccessScreen" component={PassSuccessScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="AccountDetailsScreen" component={AccountDetailsScreen} options={{ title: 'Account Details' }} />
                     <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} options={{ title: 'Feedback' }} />
-                    
+                    <Stack.Screen name="FeedbackSuccessScreen" component={FeedbackSuccessScreen} options={{ headerShown: false }} />
                 </Stack.Navigator>
         </PaperProvider>
     );

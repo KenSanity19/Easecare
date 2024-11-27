@@ -23,10 +23,8 @@ const FeedbackScreen = ({ navigation }) => {
     setRating(value);
   };
 
-  const handleSubmit = () => {
-    alert("Feedback submitted successfully!");
-    console.log("User Feedback:", feedback, { appRating, serviceRating });
-  };
+  
+
 
   return (
     <ScrollView style={styles.container}>
@@ -83,7 +81,9 @@ const FeedbackScreen = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        
+        <TouchableOpacity style={styles.button} 
+        onPress={() => navigation.navigate("FeedbackSuccessScreen")}>
           <Text style={styles.buttonText}>SUBMIT FEEDBACK</Text>
         </TouchableOpacity>
       </View>
