@@ -87,7 +87,7 @@ const HomePage = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => navigation.navigate('Notifications')}
+                    onPress={() => navigation.navigate('NotificationScreen')}
                 >
                     <Image
                         source={require('../assets/icons/notifications.png')}
