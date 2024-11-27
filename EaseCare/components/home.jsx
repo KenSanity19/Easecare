@@ -87,7 +87,7 @@ const HomePage = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.navItem}
-                    onPress={() => navigation.navigate('Me')}
+                    onPress={() => navigation.navigate('ProfileScreen')}
                 >
                     <Image
                         source={require('../assets/icons/profile.png')}
