@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import styles from './styles/dentalCareStyle';
+import { ref, set, push } from 'firebase/database';
+import { database } from '../app/firebaseConfig'; 
+
 
 const DentalCareScreen = ({ navigation }) => {
     const treatments = [
@@ -13,6 +16,7 @@ const DentalCareScreen = ({ navigation }) => {
         "Fillings and Restoration",
         "Dental Cleaning and Polishing",
     ];
+
 
     return (
         <View style={styles.container}>

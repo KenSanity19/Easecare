@@ -7,10 +7,13 @@ import styles from './styles/signUpStyle';
 import HoverableButton from './hoverableButton';
 import { getDatabase, ref, set } from 'firebase/database';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../app/firebaseConfig'; 
+import { auth } from '../app/firebaseConfig';
 
 const SignUp = ({ navigation }) => {
-    const [name, setName] = useState('');
+    // State variables for user details
+    const [firstName, setFirstName] = useState('');
+    const [middleName, setMiddleName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [age, setAge] = useState('');
     const [sex, setSex] = useState('');
     const [disabilityType, setDisabilityType] = useState('');
@@ -21,6 +24,7 @@ const SignUp = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [pwdIdFile, setPwdIdFile] = useState(null);
 
+    // State variables for dropdown menus
     const [sexMenuVisible, setSexMenuVisible] = useState(false);
     const [disabilityTypeMenuVisible, setDisabilityTypeMenuVisible] = useState(false);
     const [disabilityDurationMenuVisible, setDisabilityDurationMenuVisible] = useState(false);
@@ -40,20 +44,63 @@ const SignUp = ({ navigation }) => {
     };
 
     const handleRegister = async () => {
-        if (!name || !username || !password) {
-            Alert.alert('Error', 'Please fill in all required fields: Name, Username, and Password.');
+        // Validate required fields
+        if (!firstName) {
+            Alert.alert('Error', 'First Name is required.');
             return;
         }
-
+        if (!lastName) {
+            Alert.alert('Error', 'Last Name is required.');
+            return;
+        }
+        if (!age) {
+            Alert.alert('Error', 'Age is required.');
+            return;
+        }
+        if (!sex) {
+            Alert.alert('Error', 'Please select your sex.');
+            return;
+        }
+        if (!disabilityType) {
+            Alert.alert('Error', 'Please select a type of disability.');
+            return;
+        }
+        if (!disabilityDuration) {
+            Alert.alert('Error', 'Please specify the duration of your disability.');
+            return;
+        }
+        if (!contact) {
+            Alert.alert('Error', 'Contact number is required.');
+            return;
+        }
+        if (!address) {
+            Alert.alert('Error', 'Address is required.');
+            return;
+        }
+        if (!username) {
+            Alert.alert('Error', 'Username is required.');
+            return;
+        }
+        if (!password) {
+            Alert.alert('Error', 'Password is required.');
+            return;
+        }
+        if (!pwdIdFile) {
+            Alert.alert('Error', 'Please upload your PWD ID.');
+            return;
+        }
+    
         try {
             // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, username, password);
             const userId = userCredential.user.uid;
-
-            // Save user details in Realtime Database
-            const db = getDatabase(); // Use the default initialized Firebase app
+    
+            // Save user details in Firebase Realtime Database
+            const db = getDatabase();
             await set(ref(db, 'users/' + userId), {
-                name,
+                firstName,
+                middleName,
+                lastName,
                 age,
                 sex,
                 disabilityType,
@@ -63,12 +110,12 @@ const SignUp = ({ navigation }) => {
                 username,
                 pwdIdFile: pwdIdFile?.name || null,
             });
-
+    
             Alert.alert('Success', 'Registration successful!');
             navigation.navigate('SuccessScreen');
         } catch (error) {
             console.error('Registration Error:', error);
-
+    
             // Display user-friendly error messages
             let errorMessage = '';
             switch (error.code) {
@@ -88,10 +135,11 @@ const SignUp = ({ navigation }) => {
                     errorMessage = error.message || 'An error occurred during registration.';
                     break;
             }
-
+    
             Alert.alert('Error', errorMessage);
         }
     };
+    
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -99,10 +147,26 @@ const SignUp = ({ navigation }) => {
                 <Text style={styles.sectionHeader}>Personal Information:</Text>
 
                 <TextInput
-                    label="Name"
+                    label="First Name"
                     mode="outlined"
-                    value={name}
-                    onChangeText={setName}
+                    value={firstName}
+                    onChangeText={setFirstName}
+                    style={styles.input}
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
+                />
+                <TextInput
+                    label="Middle Name"
+                    mode="outlined"
+                    value={middleName}
+                    onChangeText={setMiddleName}
+                    style={styles.input}
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
+                />
+                <TextInput
+                    label="Last Name"
+                    mode="outlined"
+                    value={lastName}
+                    onChangeText={setLastName}
                     style={styles.input}
                     left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
                 />
@@ -117,7 +181,6 @@ const SignUp = ({ navigation }) => {
                         style={[styles.input, styles.halfInput]}
                         left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}
                     />
-
                     <Menu
                         visible={sexMenuVisible}
                         onDismiss={() => setSexMenuVisible(false)}
@@ -170,7 +233,8 @@ const SignUp = ({ navigation }) => {
                             left={<TextInput.Icon icon={() => <Ionicons name="time" size={20} color="#6e6e6e" />} />}
                             right={<TextInput.Icon icon="menu-down" onPress={() => setDisabilityDurationMenuVisible(true)} />}
                         />
-                    }>
+                    }
+                >
                     <Menu.Item onPress={() => { setDisabilityDuration('Less than a year'); setDisabilityDurationMenuVisible(false); }} title="Less than a year" />
                     <Menu.Item onPress={() => { setDisabilityDuration('1-3 years'); setDisabilityDurationMenuVisible(false); }} title="1-3 years" />
                     <Menu.Item onPress={() => { setDisabilityDuration('3-5 years'); setDisabilityDurationMenuVisible(false); }} title="3-5 years" />
