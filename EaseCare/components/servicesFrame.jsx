@@ -65,7 +65,7 @@ const ServicesScreen = ({ navigation }) => {
                     <Image source={require('../assets/icons/services.png')} style={styles.navIcon} />
                     <Text style={styles.navText}>Services</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Notifications')}>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('NotificationScreen')}>
                     <Image source={require('../assets/icons/notifications.png')} style={styles.navIcon} />
                     <Text style={styles.navText}>Notifications</Text>
                 </TouchableOpacity>

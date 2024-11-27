@@ -29,7 +29,7 @@ const SettingsScreen = ({ navigation }) => {
       {/* Security */}
       <TouchableOpacity
         style={styles.item}
-        onPress={() => navigation.navigate("Security")}
+        onPress={() => navigation.navigate("SecurityScreen")}
       >
         <MaterialIcons name="security" size={24} color="#2196f3" />
         <View style={styles.textContainer}>

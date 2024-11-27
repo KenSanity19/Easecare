@@ -15,6 +15,8 @@ import HealthWellnessScreen from '../components/healthWellnessFrame';
 import HomePage from '../components/home';
 import SettingsScreen from '../components/settings';
 import ProfileScreen from '../components/profile';
+import NotificationScreen from '../components/notify';
+import SecurityScreen from '../components/security';
 
 const Stack = createStackNavigator();
 
@@ -45,7 +47,9 @@ export default function App() {
                     <Stack.Screen name="NailTreatmentScreen" component={NailTreatmentScreen} options={{ title: 'Nail Treatment' }} />
                     <Stack.Screen name="HealthWellnessScreen" component={HealthWellnessScreen} options={{ title: 'Health and Wellness' }} />
                     <Stack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ title: 'Settings' }} />
-                    <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />   
+                    <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />  
+                    <Stack.Screen name="NotificationScreen" component={NotificationScreen}  options={{ title: 'Notification' }} /> 
+                    <Stack.Screen name="SecurityScreen" component={SecurityScreen}  options={{ title: 'Security' }} /> 
                 </Stack.Navigator>
         </PaperProvider>
     );
