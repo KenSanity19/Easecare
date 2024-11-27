@@ -1,10 +1,19 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
 
+const { width } = Dimensions.get('window'); // Get device width
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
       padding: 16,
+    },
+    bottomImage: {
+        position: 'absolute',
+        bottom: 0,
+        left: (width - 400) / 2, 
+        height: 700,
+        width: 400,
+        zIndex: 1, // Ensure it's behind the content
     },
     header: {
       fontSize: 24,
@@ -23,6 +32,7 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
+      zIndex: 2,
     },
     textContainer: {
       marginLeft: 16,

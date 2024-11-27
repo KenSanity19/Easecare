@@ -44,7 +44,7 @@ export default function App() {
                     <Stack.Screen name="BeautyParlourScreen" component={BeautyParlourScreen} options={{ title: 'Beauty Parlour' }} />
                     <Stack.Screen name="NailTreatmentScreen" component={NailTreatmentScreen} options={{ title: 'Nail Treatment' }} />
                     <Stack.Screen name="HealthWellnessScreen" component={HealthWellnessScreen} options={{ title: 'Health and Wellness' }} />
-                    <Stack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ headerShown: false }} />     
+                    <Stack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ title: 'Settings' }} />
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />   
                 </Stack.Navigator>
         </PaperProvider>
