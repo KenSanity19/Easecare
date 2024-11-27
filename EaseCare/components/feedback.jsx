@@ -4,7 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  ImageBackground,
   ScrollView,
   StatusBar,
 } from "react-native";
@@ -87,9 +87,12 @@ const FeedbackScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>SUBMIT FEEDBACK</Text>
         </TouchableOpacity>
       </View>
+      <ImageBackground
+        source={require("../assets/images/topImage.png")}
+        style={styles.bottomImage}
+        resizeMode="cover"
+      />
     </ScrollView>
   );
 }
-
-;
 export default FeedbackScreen;
