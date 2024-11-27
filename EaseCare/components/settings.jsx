@@ -14,7 +14,7 @@ const SettingsScreen = ({ navigation }) => {
       {/* Account Details */}
       <TouchableOpacity
         style={styles.item}
-        onPress={() => navigation.navigate("AccountDetails")}
+        onPress={() => navigation.navigate("AccountDetailsScreen")}
       >
         <FontAwesome name="user-circle" size={24} color="#f57c00" />
         <View style={styles.textContainer}>
@@ -43,7 +43,7 @@ const SettingsScreen = ({ navigation }) => {
       {/* Feedback */}
       <TouchableOpacity
         style={styles.item}
-        onPress={() => navigation.navigate("Feedback")}>
+        onPress={() => navigation.navigate("FeedbackScreen")}>
         <MaterialIcons name="feedback" size={24} color="#ffc107" />
         <View style={styles.textContainer}>
           <Text style={styles.title}>Feedback</Text>

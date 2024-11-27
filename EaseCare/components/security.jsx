@@ -18,7 +18,7 @@ const SecurityScreen = ({ navigation }) => {
       {/* Change Password */}
       <TouchableOpacity
         style={styles.item}
-        onPress={() => navigation.navigate("AccountDetails")}
+        onPress={() => navigation.navigate("ChangePasswordScreen")}
       >
         <FontAwesome name="user-circle" size={24} color="#f57c00" />
         <View style={styles.textContainer}>

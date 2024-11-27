@@ -3,7 +3,7 @@ import { View, ImageBackground, Image } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import styles from './styles/signUpSuccessStyles';
 
-const SuccessScreen = ({ navigation }) => {
+const PassSuccessScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -15,13 +15,17 @@ const SuccessScreen = ({ navigation }) => {
                 source={require('../assets/images/Check.png')}
                 style={styles.checkImage}/>
 
-            <Text style={styles.successText}>SUCCESS!</Text>
+            <Text style={styles.successText}>Password Updated!</Text>
+            <Text style={styles.subtitle}>
+           You password has been changed successfully
+           Use your new password to log in.
+          </Text>
             
             <Button
                 mode="contained"
-                onPress={() => navigation.navigate('ServicesScreen')}
+                onPress={() => navigation.navigate('LoginScreen')}
                 style={styles.button}
-                labelStyle={styles.buttonText}>View Services
+                labelStyle={styles.buttonText}>LOGIN
             </Button>
 
             <ImageBackground
@@ -32,4 +36,4 @@ const SuccessScreen = ({ navigation }) => {
     );
 };
 
-export default SuccessScreen;
+export default PassSuccessScreen;
