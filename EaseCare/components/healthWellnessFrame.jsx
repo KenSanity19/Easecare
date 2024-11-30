@@ -15,18 +15,23 @@ const HealthWellnessScreen = ({ navigation }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-                
+
                 // Filter services with service_group_id = 4 (for health and wellness)
-                const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 4);
+                const filteredServices = Object.values(servicesData).filter(
+                    (service) => service.service_group_id === 4
+                );
 
                 // Update the state with filtered services
                 setServices(filteredServices);
             } else {
-                Alert.alert("No Services Found", "There are no services available at the moment.");
+                Alert.alert(
+                    'No Services Found',
+                    'There are no services available at the moment.'
+                );
             }
         } catch (error) {
-            console.error("Error fetching services:", error);
-            Alert.alert("Error", "Failed to fetch services. Please try again.");
+            console.error('Error fetching services:', error);
+            Alert.alert('Error', 'Failed to fetch services. Please try again.');
         }
     };
 
@@ -54,7 +59,9 @@ const HealthWellnessScreen = ({ navigation }) => {
             {/* Content */}
             <View>
                 {/* Question */}
-                <Text style={styles.question}>What type of health and wellness service do you like?</Text>
+                <Text style={styles.question}>
+                    What type of health and wellness service do you like?
+                </Text>
 
                 {/* Services Grid */}
                 <View style={styles.gridContainer}>
@@ -62,8 +69,11 @@ const HealthWellnessScreen = ({ navigation }) => {
                         <TouchableOpacity
                             key={service.id}
                             style={styles.card}
-                            onPress={() => navigation.navigate('BookingFrame', { service })}>
-                            <Text style={styles.cardText}>{service.service_name}</Text>
+                            onPress={() =>
+                                navigation.navigate('BookingScreen', {service: service, })}>
+                            <Text style={styles.cardText}>
+                                {service.service_name}
+                            </Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -73,8 +83,15 @@ const HealthWellnessScreen = ({ navigation }) => {
                     <View style={{ alignItems: 'center', marginTop: 10 }}>
                         <TouchableOpacity
                             style={[styles.card, { width: '60%' }]}
-                            onPress={() => navigation.navigate('BookingFrame', { service: services[4] })}>
-                            <Text style={styles.cardText}>{services[4].service_name}</Text>
+                            onPress={() =>
+                                navigation.navigate('BookingScreen', {
+                                    service: services[4], // Pass the full service object
+                                })
+                            }
+                        >
+                            <Text style={styles.cardText}>
+                                {services[4].service_name}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 )}

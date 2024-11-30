@@ -72,9 +72,13 @@ const NailTreatmentScreen = ({ navigation }) => {
                 {services[4] && (
                     <View style={{ alignItems: 'center', marginTop: 10 }}>
                         <TouchableOpacity
-                            style={[styles.card, { width: '60%' }]}
-                            onPress={() => navigation.navigate('BookingFrame', { service: services[4] })}>
-                            <Text style={styles.cardText}>{services[4].service_name}</Text>
+                            key={service.id}
+                            style={styles.card}
+                            onPress={() =>
+                                navigation.navigate('BookingScreen', {service: service, })}>
+                            <Text style={styles.cardText}>
+                                {service.service_name}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 )}

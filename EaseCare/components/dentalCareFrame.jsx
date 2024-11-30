@@ -62,8 +62,11 @@ const DentalCareScreen = ({ navigation }) => {
                         <TouchableOpacity
                             key={service.id}
                             style={styles.card}
-                            onPress={() => navigation.navigate('BookingFrame', { service })}>
-                            <Text style={styles.cardText}>{service.service_name}</Text>
+                            onPress={() =>
+                                navigation.navigate('BookingScreen', {service: service, })}>
+                            <Text style={styles.cardText}>
+                                {service.service_name}
+                            </Text>
                         </TouchableOpacity>
                     ))}
                 </View>
