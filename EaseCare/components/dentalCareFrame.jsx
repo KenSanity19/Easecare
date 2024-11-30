@@ -1,22 +1,39 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './styles/dentalCareStyle';
-import { ref, set, push } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-
 const DentalCareScreen = ({ navigation }) => {
-    const treatments = [
-        "Dental Implants",
-        "Dentures",
-        "Root Canal",
-        "Veneers",
-        "Tooth Extraction",
-        "Teeth Whitening",
-        "Fillings and Restoration",
-        "Dental Cleaning and Polishing",
-    ];
+    const [services, setServices] = useState([]);
 
+    // Function to fetch services with service_group_id = 1 from Firebase
+    const fetchServices = async () => {
+        try {
+            const servicesRef = ref(database, 'tbl_services');
+            const snapshot = await get(servicesRef);
+
+            if (snapshot.exists()) {
+                const servicesData = snapshot.val();
+                
+                // Filter services with service_group_id = 1
+                const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 1);
+
+                // Update the state with filtered services
+                setServices(filteredServices);
+            } else {
+                Alert.alert("No Services Found", "There are no services available at the moment.");
+            }
+        } catch (error) {
+            console.error("Error fetching services:", error);
+            Alert.alert("Error", "Failed to fetch services. Please try again.");
+        }
+    };
+
+    // Fetch services when the component mounts
+    useEffect(() => {
+        fetchServices();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -41,13 +58,13 @@ const DentalCareScreen = ({ navigation }) => {
 
                 {/* Services Grid */}
                 <View style={styles.gridContainer}>
-                    {treatments.map((treatment, index) => (
+                    {services.map((service) => (
                         <TouchableOpacity
-                            key={index}
+                            key={service.id}
                             style={styles.card}
-                            onPress={() => navigation.navigate('BookingFrame', { treatment })}>
-                        <Text style={styles.cardText}>{treatment}</Text>
-                    </TouchableOpacity>
+                            onPress={() => navigation.navigate('BookingFrame', { service })}>
+                            <Text style={styles.cardText}>{service.service_name}</Text>
+                        </TouchableOpacity>
                     ))}
                 </View>
 

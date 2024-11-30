@@ -5,7 +5,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import styles from './styles/signUpStyle';
 import HoverableButton from './hoverableButton';
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, get } from 'firebase/database';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../app/firebaseConfig';
 
@@ -24,7 +24,6 @@ const SignUp = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [pwdIdFile, setPwdIdFile] = useState(null);
 
-    // State variables for dropdown menus
     const [sexMenuVisible, setSexMenuVisible] = useState(false);
     const [disabilityTypeMenuVisible, setDisabilityTypeMenuVisible] = useState(false);
     const [disabilityDurationMenuVisible, setDisabilityDurationMenuVisible] = useState(false);
@@ -87,13 +86,21 @@ const SignUp = ({ navigation }) => {
         }
 
         try {
-            // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, username, password);
-            const userId = userCredential.user.uid;
     
-            // Save user details in Firebase Realtime Database
             const db = getDatabase();
-            await set(ref(db, 'tbl_customer/' + userId), {
+            const customersRef = ref(db, 'tbl_customer');
+            const snapshot = await get(customersRef);
+    
+            let newUserId = 'C1'; 
+            if (snapshot.exists()) {
+                const userIds = Object.keys(snapshot.val());
+                const numericIds = userIds.map((id) => parseInt(id.replace('C', ''), 10)).filter((num) => !isNaN(num));
+                const highestId = Math.max(...numericIds);
+                newUserId = `C${highestId + 1}`; 
+            }
+    
+            await set(ref(db, `tbl_customer/${newUserId}`), {
                 firstName,
                 middleName,
                 lastName,
@@ -112,7 +119,6 @@ const SignUp = ({ navigation }) => {
         } catch (error) {
             console.error('Registration Error:', error);
     
-            // Display user-friendly error messages
             let errorMessage = '';
             switch (error.code) {
                 case 'auth/email-already-in-use':
@@ -148,24 +154,21 @@ const SignUp = ({ navigation }) => {
                     value={firstName}
                     onChangeText={setFirstName}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}/>
                 <TextInput
                     label="Middle Name"
                     mode="outlined"
                     value={middleName}
                     onChangeText={setMiddleName}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}/>
                 <TextInput
                     label="Last Name"
                     mode="outlined"
                     value={lastName}
                     onChangeText={setLastName}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <Ionicons name="person" size={20} color="#6e6e6e" />} />}/>
 
                 <View style={styles.row}>
                     <TextInput
@@ -175,8 +178,7 @@ const SignUp = ({ navigation }) => {
                         onChangeText={setAge}
                         keyboardType="numeric"
                         style={[styles.input, styles.halfInput, { marginRight: 20 }]} 
-                        left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}
-                    />
+                        left={<TextInput.Icon icon={() => <Ionicons name="calendar" size={20} color="#6e6e6e" />} />}/>
                     <Menu
                         visible={sexMenuVisible}
                         onDismiss={() => setSexMenuVisible(false)}
@@ -188,10 +190,7 @@ const SignUp = ({ navigation }) => {
                                 value={sex}
                                 style={[styles.input, styles.halfInput]}
                                 left={<TextInput.Icon icon={() => <Ionicons name="transgender" size={20} color="#6e6e6e" />} />}
-                                right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setSexMenuVisible(true)} />}
-                            />
-                        }
-                    >
+                                right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setSexMenuVisible(true)} />}/>}>
                         <Menu.Item onPress={() => { setSex('Male'); setSexMenuVisible(false); }} title="Male" />
                         <Menu.Item onPress={() => { setSex('Female'); setSexMenuVisible(false); }} title="Female" />
                         <Menu.Item onPress={() => { setSex('Other'); setSexMenuVisible(false); }} title="Other" />
@@ -209,10 +208,7 @@ const SignUp = ({ navigation }) => {
                             value={disabilityType}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="accessibility" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityTypeMenuVisible(true)} />}
-                        />
-                    }
-                >
+                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityTypeMenuVisible(true)} />}/>}>
                     <Menu.Item onPress={() => { setDisabilityType('Visual Impairment'); setDisabilityTypeMenuVisible(false); }} title="Visual Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Hearing Impairment'); setDisabilityTypeMenuVisible(false); }} title="Hearing Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Mobility Impairment'); setDisabilityTypeMenuVisible(false); }} title="Mobility Impairment" />
@@ -230,10 +226,7 @@ const SignUp = ({ navigation }) => {
                             value={disabilityDuration}
                             style={styles.input}
                             left={<TextInput.Icon icon={() => <Ionicons name="time" size={20} color="#6e6e6e" />} />}
-                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityDurationMenuVisible(true)} />}
-                        />
-                    }
-                >
+                            right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityDurationMenuVisible(true)} />}/>}>
                     <Menu.Item onPress={() => { setDisabilityDuration('Less than a year'); setDisabilityDurationMenuVisible(false); }} title="Less than a year" />
                     <Menu.Item onPress={() => { setDisabilityDuration('1-3 years'); setDisabilityDurationMenuVisible(false); }} title="1-3 years" />
                     <Menu.Item onPress={() => { setDisabilityDuration('3-5 years'); setDisabilityDurationMenuVisible(false); }} title="3-5 years" />
@@ -247,16 +240,14 @@ const SignUp = ({ navigation }) => {
                     onChangeText={setContact}
                     keyboardType="phone-pad"
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="call" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <Ionicons name="call" size={20} color="#6e6e6e" />} />}/>
                 <TextInput
                     label="Address"
                     mode="outlined"
                     value={address}
                     onChangeText={setAddress}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="home" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <Ionicons name="home" size={20} color="#6e6e6e" />} />}/>
 
                 <Text style={styles.accountDetailsHeader}>Account Details:</Text>
                 <TextInput
@@ -265,8 +256,7 @@ const SignUp = ({ navigation }) => {
                     value={username}
                     onChangeText={setUsername}
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}/>
                 <TextInput
                     label="Password"
                     mode="outlined"
@@ -274,8 +264,7 @@ const SignUp = ({ navigation }) => {
                     onChangeText={setPassword}
                     secureTextEntry
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}
-                />
+                    left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}/>
 
                 <Text style={styles.fileUploadText}>Upload your PWD ID here:</Text>
                 <Button mode="outlined" onPress={handleFilePicker} style={styles.fileButton}>Choose File</Button>
@@ -285,17 +274,13 @@ const SignUp = ({ navigation }) => {
                     mode="contained"
                     style={styles.registerButton}
                     labelStyle={styles.registerButtonText}
-                    onPress={handleRegister}
-                >
-                    Register
+                    onPress={handleRegister}>Register
                 </HoverableButton>
 
                 <Button
                     mode="text"
                     style={styles.loginRedirectButton}
-                    onPress={() => navigation.navigate('LoginScreen')}
-                >
-                    Already have an account? Login here.
+                    onPress={() => navigation.navigate('LoginScreen')}>Already have an account? Login here.
                 </Button>
             </View>
         </ScrollView>
