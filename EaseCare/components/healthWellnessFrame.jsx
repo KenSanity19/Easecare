@@ -6,8 +6,6 @@ import { database } from '../app/firebaseConfig';
 
 const HealthWellnessScreen = ({ navigation }) => {
     const [services, setServices] = useState([]);
-
-    // Function to fetch services with service_group_id = 4 from Firebase
     const fetchServices = async () => {
         try {
             const servicesRef = ref(database, 'tbl_services');
@@ -15,13 +13,10 @@ const HealthWellnessScreen = ({ navigation }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-
-                // Filter services with service_group_id = 4 (for health and wellness)
                 const filteredServices = Object.values(servicesData).filter(
                     (service) => service.service_group_id === 4
                 );
 
-                // Update the state with filtered services
                 setServices(filteredServices);
             } else {
                 Alert.alert(
@@ -35,7 +30,6 @@ const HealthWellnessScreen = ({ navigation }) => {
         }
     };
 
-    // Fetch services when the component mounts
     useEffect(() => {
         fetchServices();
     }, []);
@@ -85,13 +79,11 @@ const HealthWellnessScreen = ({ navigation }) => {
                             style={[styles.card, { width: '60%' }]}
                             onPress={() =>
                                 navigation.navigate('BookingScreen', {
-                                    service: services[4], // Pass the full service object
+                                    service: services[4], 
                                 })
                             }
                         >
-                            <Text style={styles.cardText}>
-                                {services[4].service_name}
-                            </Text>
+                            <Text style={styles.cardText}> {services[4].service_name}</Text>
                         </TouchableOpacity>
                     </View>
                 )}

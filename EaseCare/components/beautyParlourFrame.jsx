@@ -6,8 +6,6 @@ import { database } from '../app/firebaseConfig';
 
 const BeautyParlourScreen = ({ navigation }) => {
     const [services, setServices] = useState([]);
-
-    // Function to fetch services with service_group_id = 2 from Firebase
     const fetchServices = async () => {
         try {
             const servicesRef = ref(database, 'tbl_services');
@@ -15,11 +13,8 @@ const BeautyParlourScreen = ({ navigation }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-                
-                // Filter services with service_group_id = 2
                 const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 2);
 
-                // Update the state with filtered services
                 setServices(filteredServices);
             } else {
                 Alert.alert("No Services Found", "There are no services available at the moment.");
@@ -30,7 +25,6 @@ const BeautyParlourScreen = ({ navigation }) => {
         }
     };
 
-    // Fetch services when the component mounts
     useEffect(() => {
         fetchServices();
     }, []);

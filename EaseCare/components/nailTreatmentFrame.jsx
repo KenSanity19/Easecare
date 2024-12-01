@@ -5,92 +5,88 @@ import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig';
 
 const NailTreatmentScreen = ({ navigation }) => {
-    const [services, setServices] = useState([]);
+const [services, setServices] = useState([]);
 
-    // Function to fetch services with service_group_id = 3 from Firebase
     const fetchServices = async () => {
-        try {
-            const servicesRef = ref(database, 'tbl_services');
-            const snapshot = await get(servicesRef);
+    try {
+    const servicesRef = ref(database, 'tbl_services');
+    const snapshot = await get(servicesRef);
 
-            if (snapshot.exists()) {
-                const servicesData = snapshot.val();
-                
-                // Filter services with service_group_id = 3 (for nail treatments)
-                const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 3);
+    if (snapshot.exists()) {
+        const servicesData = snapshot.val();
 
-                // Update the state with filtered services
-                setServices(filteredServices);
-            } else {
-                Alert.alert("No Services Found", "There are no services available at the moment.");
-            }
-        } catch (error) {
-            console.error("Error fetching services:", error);
-            Alert.alert("Error", "Failed to fetch services. Please try again.");
-        }
-    };
+        const filteredServices = Object.values(servicesData).filter(
+        (service) => service.service_group_id === 3 );
 
-    // Fetch services when the component mounts
+        setServices(filteredServices);
+    } else {
+        Alert.alert('No Services Found', 'There are no services available at the moment.');
+    }
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        Alert.alert('Error', 'Failed to fetch services. Please try again.');
+    }
+};
+
+
     useEffect(() => {
-        fetchServices();
-    }, []);
+    fetchServices(); }, []);
 
-    return (
-        <View style={styles.container}>
-            {/* Left Background Image */}
-            <Image
-                source={require('../assets/images/servicesLeft.png')}
-                style={styles.leftImage}
-                resizeMode="cover"
-            />
+return (
+    <View style={styles.container}>
+    {/* Left Background Image */}
+    <Image
+        source={require('../assets/images/servicesLeft.png')}
+        style={styles.leftImage}
+        resizeMode="cover"
+    />
 
-            {/* Right Background Image */}
-            <Image
-                source={require('../assets/images/servicesRight.png')}
-                style={styles.rightImage}
-                resizeMode="cover"
-            />
+    {/* Right Background Image */}
+    <Image
+        source={require('../assets/images/servicesRight.png')}
+        style={styles.rightImage}
+        resizeMode="cover"
+    />
 
-            {/* Content */}
-            <View>
-                {/* Question */}
-                <Text style={styles.question}>What type of nail treatment do you like?</Text>
+    {/* Content */}
+    <View>
+        <Text style={styles.question}>What type of nail treatment do you like?</Text>
 
-                {/* Services Grid */}
-                <View style={styles.gridContainer}>
-                    {services.slice(0, 4).map((service) => (
-                        <TouchableOpacity
-                            key={service.id}
-                            style={styles.card}
-                            onPress={() => navigation.navigate('BookingFrame', { service })}>
-                            <Text style={styles.cardText}>{service.service_name}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                {/* Center the last service */}
-                {services[4] && (
-                    <View style={{ alignItems: 'center', marginTop: 10 }}>
-                        <TouchableOpacity
-                            key={service.id}
-                            style={styles.card}
-                            onPress={() =>
-                                navigation.navigate('BookingScreen', {service: service, })}>
-                            <Text style={styles.cardText}>
-                                {service.service_name}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {/* Logo */}
-                <Image
-                    source={require('../assets/images/nailTreatmentLogo.png')}
-                    style={styles.logo}
-                    resizeMode="contain"
-                />
-            </View>
+        {/* Services Grid */}
+        <View style={styles.gridContainer}>
+        {services.slice(0, 4).map((service) => (
+            <TouchableOpacity
+            key={service.id}
+            style={styles.card}
+            onPress={() => navigation.navigate('BookingScreen', { service })}
+            >
+            <Text style={styles.cardText}>{service.service_name}</Text>
+            </TouchableOpacity>
+        ))}
         </View>
+
+        {/* Center the last service */}
+        {services[4] && (
+        <View style={{ alignItems: 'center', marginTop: 10 }}>
+            <TouchableOpacity
+            key={services[4].id} 
+            style={styles.card}
+            onPress={() =>
+                navigation.navigate('BookingScreen', { service: services[4] }) 
+            }
+            >
+            <Text style={styles.cardText}>{services[4].service_name}</Text> 
+            </TouchableOpacity>
+        </View>
+        )}
+
+        {/* Logo */}
+        <Image
+            source={require('../assets/images/nailTreatmentLogo.png')}
+            style={styles.logo}
+            resizeMode="contain" />
+        </View>
+    </View>
     );
 };
 
