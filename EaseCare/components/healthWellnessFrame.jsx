@@ -4,8 +4,10 @@ import styles from './styles/healthWellnessStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig';
 
-const HealthWellnessScreen = ({ navigation }) => {
+const HealthWellnessScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
+
+    // Fetch health and wellness services from Firebase
     const fetchServices = async () => {
         try {
             const servicesRef = ref(database, 'tbl_services');
@@ -30,6 +32,7 @@ const HealthWellnessScreen = ({ navigation }) => {
         }
     };
 
+    // Fetch services when the component mounts
     useEffect(() => {
         fetchServices();
     }, []);
@@ -59,15 +62,18 @@ const HealthWellnessScreen = ({ navigation }) => {
 
                 {/* Services Grid */}
                 <View style={styles.gridContainer}>
-                    {services.slice(0, 4).map((service) => (
+                    {services.slice(0, 4).map((service, index) => (
                         <TouchableOpacity
-                            key={service.id}
+                            key={service.id || index}
                             style={styles.card}
                             onPress={() =>
-                                navigation.navigate('BookingScreen', {service: service, })}>
-                            <Text style={styles.cardText}>
-                                {service.service_name}
-                            </Text>
+                                navigation.navigate("BookingScreen", {
+                                    service: service,
+                                    previousServices: route.params?.previousServices || [],
+                                })
+                            }
+                        >
+                            <Text style={styles.cardText}>{service.service_name}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -76,14 +82,16 @@ const HealthWellnessScreen = ({ navigation }) => {
                 {services[4] && (
                     <View style={{ alignItems: 'center', marginTop: 10 }}>
                         <TouchableOpacity
-                            style={[styles.card, { width: '60%' }]}
+                            key={services[4].id || 4}
+                            style={styles.card}
                             onPress={() =>
-                                navigation.navigate('BookingScreen', {
-                                    service: services[4], 
+                                navigation.navigate("BookingScreen", {
+                                    service: services[4],
+                                    previousServices: route.params?.previousServices || [],
                                 })
                             }
                         >
-                            <Text style={styles.cardText}> {services[4].service_name}</Text>
+                            <Text style={styles.cardText}>{services[4].service_name}</Text>
                         </TouchableOpacity>
                     </View>
                 )}

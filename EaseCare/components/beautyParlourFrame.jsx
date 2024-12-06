@@ -4,8 +4,10 @@ import styles from './styles/beautyParlourStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const BeautyParlourScreen = ({ navigation }) => {
+const BeautyParlourScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
+
+    // Function to fetch services with service_group_id = 2 from Firebase
     const fetchServices = async () => {
         try {
             const servicesRef = ref(database, 'tbl_services');
@@ -13,7 +15,12 @@ const BeautyParlourScreen = ({ navigation }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-                const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 2);
+                console.log("Fetched services:", servicesData);
+
+                // Filter services with service_group_id = 2
+                const filteredServices = Object.values(servicesData).filter(
+                    (service) => service.service_group_id === 2
+                );
 
                 setServices(filteredServices);
             } else {
@@ -25,6 +32,7 @@ const BeautyParlourScreen = ({ navigation }) => {
         }
     };
 
+    // Fetch services when the component mounts
     useEffect(() => {
         fetchServices();
     }, []);
@@ -51,19 +59,28 @@ const BeautyParlourScreen = ({ navigation }) => {
                 <Text style={styles.question}>What type of beauty treatments do you like?</Text>
 
                 {/* Services Grid */}
-                <View style={styles.gridContainer}>
-                    {services.map((service) => (
-                        <TouchableOpacity
-                        key={service.id}
-                        style={styles.card}
-                        onPress={() =>
-                            navigation.navigate('BookingScreen', {service: service, })}>
-                        <Text style={styles.cardText}>
-                            {service.service_name}
-                        </Text>
-                    </TouchableOpacity>
-                    ))}
-                </View>
+                {services.length === 0 ? (
+                    <Text style={styles.noServicesText}>
+                        No beauty treatments available at the moment.
+                    </Text>
+                ) : (
+                    <View style={styles.gridContainer}>
+                        {services.map((service, index) => (
+                            <TouchableOpacity
+                            key={service.id || index}
+                            style={styles.card}
+                            onPress={() =>
+                                navigation.navigate("BookingScreen", {
+                                service: service,
+                                previousServices: route.params?.previousServices || [], // Include previously selected services
+                                })
+                                }
+                            >
+                            <Text style={styles.cardText}>{service.service_name}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                )}
 
                 {/* Logo */}
                 <Image

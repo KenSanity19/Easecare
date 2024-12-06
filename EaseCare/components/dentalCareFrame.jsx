@@ -4,7 +4,7 @@ import styles from './styles/dentalCareStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const DentalCareScreen = ({ navigation }) => {
+const DentalCareScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
 
     // Function to fetch services with service_group_id = 1 from Firebase
@@ -15,9 +15,12 @@ const DentalCareScreen = ({ navigation }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-                
+                console.log("Fetched services:", servicesData);
+
                 // Filter services with service_group_id = 1
-                const filteredServices = Object.values(servicesData).filter(service => service.service_group_id === 1);
+                const filteredServices = Object.values(servicesData).filter(
+                    (service) => service.service_group_id === 1
+                );
 
                 // Update the state with filtered services
                 setServices(filteredServices);
@@ -54,22 +57,33 @@ const DentalCareScreen = ({ navigation }) => {
             {/* Content */}
             <View>
                 {/* Question */}
-                <Text style={styles.question}>What type of dental treatments do you like?</Text>
+                <Text style={styles.question}>
+                    What type of dental treatments do you like?
+                </Text>
 
                 {/* Services Grid */}
-                <View style={styles.gridContainer}>
-                    {services.map((service) => (
+                {services.length === 0 ? (
+                    <Text style={styles.noServicesText}>
+                        No dental treatments available at the moment.
+                    </Text>
+                ) : (
+                    <View style={styles.gridContainer}>
+                        {services.map((service, index) => (
                         <TouchableOpacity
-                            key={service.id}
-                            style={styles.card}
-                            onPress={() =>
-                                navigation.navigate('BookingScreen', {service: service, })}>
-                            <Text style={styles.cardText}>
-                                {service.service_name}
-                            </Text>
+                        key={service.id || index}
+                        style={styles.card}
+                        onPress={() =>
+                            navigation.navigate("BookingScreen", {
+                            service: service,
+                            previousServices: route.params?.previousServices || [], 
+                            })
+                            }
+                        >
+                        <Text style={styles.cardText}>{service.service_name}</Text>
                         </TouchableOpacity>
-                    ))}
-                </View>
+                        ))}
+                    </View>
+                )}
 
                 {/* Logo */}
                 <Image

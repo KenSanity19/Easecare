@@ -1,30 +1,36 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 import styles from "./styles/bookingStyles";
 
 const BookingScreen = ({ route, navigation }) => {
-  // Ensure service is passed as part of the route params
-  const { service } = route.params;
+  // Destructure service and previousServices from route params
+  const { service, previousServices = [] } = route.params || {};
 
-  // Destructure service properties (e.g., service_name, price)
-  const { service_name, price } = service || {};
-
-  // Check if service is undefined or missing required properties
-  if (!service || !service_name || !price) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.header}>Error</Text>
-        <Text style={{ color: "red" }}>Service details are missing or incorrect.</Text>
-      </View>
-    );
-  }
+  // State to track selected services
+  const [selectedServices, setSelectedServices] = useState(previousServices);
 
   // State to track selected gender for the aider
   const [selectedGender, setSelectedGender] = useState(null);
 
+  // Function to handle selection of an aider
   const handleAiderSelection = (gender) => {
     setSelectedGender(gender);
   };
+
+  // Add new service to the list when the screen loads
+  useEffect(() => {
+    if (service) {
+      setSelectedServices((prevServices) => {
+        // Merge current services with new service, avoiding duplicates
+        const updatedServices = [...prevServices, service];
+        return Array.from(new Set(updatedServices.map((s) => s.id || s.service_name)))
+          .map((key) =>
+            updatedServices.find((s) => (s.id || s.service_name) === key)
+          );
+      });
+    }
+  }, [service]);
+  
 
   return (
     <View style={styles.container}>
@@ -82,11 +88,30 @@ const BookingScreen = ({ route, navigation }) => {
       {/* Booking Details Section */}
       <Text style={styles.header}>Booking Details</Text>
       <View style={styles.bookingDetailsContainer}>
-        <View style={styles.serviceDetails}>
-          <Text style={styles.serviceName}>{service_name}</Text>
-          <Text style={styles.priceText}>{price}</Text>
-        </View>
+          <FlatList
+            data={selectedServices}
+            keyExtractor={(item) => item.id?.toString() || item.service_name}
+            renderItem={({ item }) => (
+              <View style={styles.serviceDetails}>
+                <Text style={styles.serviceName}>{item.service_name}</Text>
+                <Text style={styles.priceText}>{item.price || "N/A"}</Text>
+              </View>
+            )}
+          />
       </View>
+
+      {/* ADD MORE Button */}
+      <TouchableOpacity
+        style={styles.addMoreButton}
+        onPress={() =>
+          navigation.navigate("ServicesScreen", {
+            previousServices: selectedServices, // Pass all currently selected services
+          })
+        }
+      >
+        <Text style={styles.addMoreButtonText}>ADD MORE</Text>
+      </TouchableOpacity>
+
 
       {/* Date and Time Picker */}
       <View style={styles.dateTimePicker}>
