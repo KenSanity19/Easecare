@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles/bookingStyles";
 
 const BookingScreen = ({ route, navigation }) => {
-  // Destructure service and previousServices from route params
   const { service, previousServices = [] } = route.params || {};
 
-  // State to track selected services
   const [selectedServices, setSelectedServices] = useState(previousServices);
-
-  // State to track selected gender for the aider
   const [selectedGender, setSelectedGender] = useState(null);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [selectedTime, setSelectedTime] = useState("");
 
-  // Function to handle selection of an aider
   const handleAiderSelection = (gender) => {
     setSelectedGender(gender);
   };
 
-  // Add new service to the list when the screen loads
   useEffect(() => {
     if (service) {
       setSelectedServices((prevServices) => {
-        // Merge current services with new service, avoiding duplicates
         const updatedServices = [...prevServices, service];
         return Array.from(new Set(updatedServices.map((s) => s.id || s.service_name)))
           .map((key) =>
@@ -30,14 +35,29 @@ const BookingScreen = ({ route, navigation }) => {
       });
     }
   }, [service]);
-  
+
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
+
+  const handleConfirmDate = (date) => {
+    setSelectedDate(date.toISOString().split("T")[0]);
+    hideDatePicker();
+  };
+
+  const showTimePicker = () => setTimePickerVisibility(true);
+  const hideTimePicker = () => setTimePickerVisibility(false);
+
+  const handleConfirmTime = (time) => {
+    setSelectedTime(
+      time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    );
+    hideTimePicker();
+  };
 
   return (
     <View style={styles.container}>
-      {/* Aider Selection Section */}
       <Text style={styles.header}>What aider do you prefer?</Text>
       <View style={styles.genderSelector}>
-        {/* Male Aider */}
         <TouchableOpacity
           style={[
             styles.genderOption,
@@ -59,7 +79,8 @@ const BookingScreen = ({ route, navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        {/* Female Aider */}
+        <Text style={styles.orText}>OR</Text>
+
         <TouchableOpacity
           style={[
             styles.genderOption,
@@ -82,51 +103,80 @@ const BookingScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Line Separator */}
       <View style={styles.separator}></View>
 
-      {/* Booking Details Section */}
-      <Text style={styles.header}>Booking Details</Text>
       <View style={styles.bookingDetailsContainer}>
+        {selectedServices.length === 0 ? (
+          <Text style={styles.noServicesText}>No services selected yet.</Text>
+        ) : (
           <FlatList
             data={selectedServices}
             keyExtractor={(item) => item.id?.toString() || item.service_name}
             renderItem={({ item }) => (
               <View style={styles.serviceDetails}>
                 <Text style={styles.serviceName}>{item.service_name}</Text>
-                <Text style={styles.priceText}>{item.price || "N/A"}</Text>
+                <Text style={styles.priceText}>
+                  {item.price ? `${item.price}` : "N/A"}
+                </Text>
               </View>
             )}
           />
+        )}
       </View>
 
-      {/* ADD MORE Button */}
       <TouchableOpacity
         style={styles.addMoreButton}
         onPress={() =>
           navigation.navigate("ServicesScreen", {
-            previousServices: selectedServices, // Pass all currently selected services
+            previousServices: selectedServices,
           })
         }
       >
         <Text style={styles.addMoreButtonText}>ADD MORE</Text>
       </TouchableOpacity>
 
-
-      {/* Date and Time Picker */}
-      <View style={styles.dateTimePicker}>
-        <TouchableOpacity style={styles.dateButton}>
-          <Text style={styles.dateButtonText}>Select Date</Text>
+      <View style={styles.dateTimeContainer}>
+        <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>
+          <MaterialIcons name="calendar-today" size={20} color="gray" />
+          <Text style={styles.dateText}>
+            {selectedDate || "Select a Date"}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.dateButton}>
-          <Text style={styles.dateButtonText}>Select Time</Text>
+
+        <TouchableOpacity onPress={showTimePicker} style={styles.timeInput}>
+          <MaterialIcons name="access-time" size={20} color="gray" />
+          <Text style={styles.timeText}>
+            {selectedTime || "Select a Time"}
+          </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Book Now Button */}
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirmDate}
+        onCancel={hideDatePicker}
+      />
+      <DateTimePickerModal
+        isVisible={isTimePickerVisible}
+        mode="time"
+        onConfirm={handleConfirmTime}
+        onCancel={hideTimePicker}
+      />
+
       <TouchableOpacity
         style={styles.bookButton}
-        onPress={() => alert("Booking Confirmed!")}
+        onPress={() => {
+          if (!selectedGender) {
+            alert("Please select an aider.");
+            return;
+          }
+          if (selectedServices.length === 0) {
+            alert("Please select at least one service.");
+            return;
+          }
+          alert("Booking Confirmed!");
+        }}
       >
         <Text style={styles.bookButtonText}>BOOK NOW</Text>
       </TouchableOpacity>

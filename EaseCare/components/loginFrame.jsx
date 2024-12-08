@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, Alert, TouchableOpacity } from 'react-native';
+import { View, Image, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth'; // Firebase Auth import
@@ -11,6 +11,7 @@ import HoverableButton from './hoverableButton';
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // New state for loading animation
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -18,6 +19,7 @@ const LoginScreen = ({ navigation }) => {
             return;
         }
 
+        setIsLoading(true); // Show the loading spinner
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password); // Use the imported `auth`
             const user = userCredential.user;
@@ -27,7 +29,6 @@ const LoginScreen = ({ navigation }) => {
         } catch (error) {
             console.error(error);
 
-            // Map error codes to user-friendly messages
             let errorMessage = '';
             switch (error.code) {
                 case 'auth/invalid-email':
@@ -50,15 +51,15 @@ const LoginScreen = ({ navigation }) => {
                     break;
             }
 
-            // Show the error message
             Alert.alert('Login Failed', errorMessage);
+        } finally {
+            setIsLoading(false); // Hide the loading spinner
         }
     };
 
-    // Handle Facebook Login
     const handleFacebookLogin = async () => {
+        setIsLoading(true); // Show loading spinner
         try {
-            // Ensure initialization only happens once
             await Facebook.initializeAsync({
                 appId: '935984145151270', // Replace with your Facebook app ID
             });
@@ -68,7 +69,6 @@ const LoginScreen = ({ navigation }) => {
             });
 
             if (type === 'success') {
-                // Do something with the token (e.g., send it to your backend or Firebase)
                 console.log('Facebook login successful, token:', token);
                 Alert.alert('Success', 'Facebook login successful');
                 navigation.navigate('ServicesScreen'); // Redirect to the services screen
@@ -78,6 +78,8 @@ const LoginScreen = ({ navigation }) => {
         } catch (error) {
             console.error('Facebook Login Error:', error);
             Alert.alert('Login Failed', 'There was an issue with Facebook login.');
+        } finally {
+            setIsLoading(false); // Hide the loading spinner
         }
     };
 
@@ -93,74 +95,80 @@ const LoginScreen = ({ navigation }) => {
                 <Text style={styles.title}>EASECARE</Text>
             </View>
 
-            <TextInput
-                label="Email / Username"
-                mode="outlined"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={styles.input}
-                left={<TextInput.Icon icon={() => <Ionicons name="mail" size={20} color="#6e6e6e" />} />}
-            />
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#0000ff" style={styles.loadingSpinner} />
+            ) : (
+                <>
+                    <TextInput
+                        label="Email / Username"
+                        mode="outlined"
+                        value={email}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        style={styles.input}
+                        left={<TextInput.Icon icon={() => <Ionicons name="mail" size={20} color="#6e6e6e" />} />}
+                    />
 
-            <TextInput
-                label="Password"
-                mode="outlined"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-                left={<TextInput.Icon icon={() => <Ionicons name="lock-closed" size={20} color="#6e6e6e" />} />}
-            />
+                    <TextInput
+                        label="Password"
+                        mode="outlined"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                        style={styles.input}
+                        left={<TextInput.Icon icon={() => <Ionicons name="lock-closed" size={20} color="#6e6e6e" />} />}
+                    />
 
-            <Button
-                mode="text"
-                style={styles.forgotPasswordButton}
-                labelStyle={styles.forgotPasswordLabel}
-                onPress={() => navigation.navigate('ForgotPasswordScreen')}
-            >
-                Forgot Password?
-            </Button>
+                    <Button
+                        mode="text"
+                        style={styles.forgotPasswordButton}
+                        labelStyle={styles.forgotPasswordLabel}
+                        onPress={() => navigation.navigate('ForgotPasswordScreen')}
+                    >
+                        Forgot Password?
+                    </Button>
 
-            <HoverableButton
-                mode="contained"
-                style={styles.loginButton}
-                labelStyle={styles.loginButtonText}
-                onPress={handleLogin}
-            >
-                Log In
-            </HoverableButton>
+                    <HoverableButton
+                        mode="contained"
+                        style={styles.loginButton}
+                        labelStyle={styles.loginButtonText}
+                        onPress={handleLogin}
+                    >
+                        Log In
+                    </HoverableButton>
 
-            <View style={styles.separator} />
+                    <View style={styles.separator} />
 
-            <View style={styles.socialLoginContainer}>
-                <TouchableOpacity onPress={handleBiometricsLogin} style={styles.biometricsButton}>
-                    <Text style={styles.biometricLabel}>
-                        Login using <Text style={styles.biometricBold}>BIOMETRICS</Text>
-                    </Text>
-                </TouchableOpacity>
-                <Text style={styles.orText}>OR</Text>
-                <View style={styles.socialButtonsContainer}>
-                    <TouchableOpacity style={styles.socialButton} onPress={handleFacebookLogin}>
-                        <FontAwesome name="facebook" size={24} color="#3b5998" />
-                        <Text style={styles.socialButtonText}>Facebook</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton}>
-                        <FontAwesome name="google" size={24} color="#db4437" />
-                        <Text style={styles.socialButtonText}>Google</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                    <View style={styles.socialLoginContainer}>
+                        <TouchableOpacity onPress={handleBiometricsLogin} style={styles.biometricsButton}>
+                            <Text style={styles.biometricLabel}>
+                                Login using <Text style={styles.biometricBold}>BIOMETRICS</Text>
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.orText}>OR</Text>
+                        <View style={styles.socialButtonsContainer}>
+                            <TouchableOpacity style={styles.socialButton} onPress={handleFacebookLogin}>
+                                <FontAwesome name="facebook" size={24} color="#3b5998" />
+                                <Text style={styles.socialButtonText}>Facebook</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.socialButton}>
+                                <FontAwesome name="google" size={24} color="#db4437" />
+                                <Text style={styles.socialButtonText}>Google</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
 
-            <Button
-                mode="text"
-                style={styles.registerButton}
-                labelStyle={{ color: 'black' }}
-                onPress={() => navigation.navigate('SignUp')}
-            >
-                Don't have an account? <Text style={styles.signUpText}>Sign Up</Text>
-            </Button>
+                    <Button
+                        mode="text"
+                        style={styles.registerButton}
+                        labelStyle={{ color: 'black' }}
+                        onPress={() => navigation.navigate('SignUp')}
+                    >
+                        Don't have an account? <Text style={styles.signUpText}>Sign Up</Text>
+                    </Button>
+                </>
+            )}
         </View>
     );
 };

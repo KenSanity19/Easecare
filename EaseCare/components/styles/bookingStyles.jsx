@@ -44,12 +44,18 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         marginBottom: 5,
-        borderRadius: 40, // Circle image
+        borderRadius: 40, 
     },
     genderText: {
         fontSize: 16,
         fontWeight: "bold",
         color: "#333",
+    },
+    orText: {
+        fontSize: 16,
+        color: "gray",
+        marginHorizontal: 10,
+        alignSelf: "center",
     },
     addMoreButton: {
         backgroundColor: "#f0ad4e",
@@ -105,8 +111,50 @@ const styles = StyleSheet.create({
     separator: {
         height: 1,
         backgroundColor: "#ddd",
-        marginVertical: 20,
+        marginBottom: 20,
+        marginTop: 5,
     },
+    dateTimeContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginVertical: 15,
+        width: "90%",
+        alignSelf: "center",
+    },
+    dateInput: {
+        flexDirection: "row",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#fff",
+        width: "48%", // Adjust width to fit two fields in one row
+        justifyContent: "space-between",
+    },  
+    timeInput: {
+        flexDirection: "row",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#fff",
+        width: "48%", // Adjust width to fit two fields in one row
+        justifyContent: "space-between",
+    },
+    dateText: {
+        marginLeft: 10,
+        fontSize: 16,
+        color: "#555",
+    },
+    timeText: {
+        marginLeft: 10,
+        fontSize: 16,
+        color: "#555",
+    },
+
 });
 
 export default styles;

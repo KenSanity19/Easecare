@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         height: 90, 
         width: 90, 
         marginBottom: 20,
+        marginLeft: 40,
     },
     successText: {
         fontSize: 36,
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+        padding: 7,
     },
 });
 
