@@ -4,7 +4,7 @@ import styles from './styles/beautyParlourStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const BeautyParlourScreen = ({ navigation, route }) => {
+const BeautyParlourScreen = ({ navigation }) => {
     const [services, setServices] = useState([]);
 
     // Function to fetch services with service_group_id = 2 from Firebase
@@ -67,21 +67,20 @@ const BeautyParlourScreen = ({ navigation, route }) => {
                     <View style={styles.gridContainer}>
                         {services.map((service, index) => (
                             <TouchableOpacity
-                            key={service.id || index}
-                            style={styles.card}
-                            onPress={() =>
-                                navigation.navigate("BookingScreen", {
-                                service: service,
-                                previousServices: route.params?.previousServices || [], // Include previously selected services
-                                })
+                                key={service.id || index}
+                                style={styles.card}
+                                onPress={() =>
+                                    navigation.navigate("BookingScreen", {
+                                        service: service
+                                    })
                                 }
                             >
-                            <Text style={styles.cardText}>{service.service_name}</Text>
+                                <Text style={styles.cardText}>{service.service_name}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
                 )}
-
+ 
                 {/* Logo */}
                 <Image
                     source={require('../assets/images/beautyParlourLogo.png')}

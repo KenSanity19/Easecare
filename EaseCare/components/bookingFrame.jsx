@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import styles from "./styles/bookingStyles";
 
-const BookingScreen = ({ route, navigation }) => {
+const BookingScreen = ({ route }) => {
   const { service, previousServices = [] } = route.params || {};
 
   const [selectedServices, setSelectedServices] = useState(previousServices);
@@ -123,17 +117,6 @@ const BookingScreen = ({ route, navigation }) => {
           />
         )}
       </View>
-
-      <TouchableOpacity
-        style={styles.addMoreButton}
-        onPress={() =>
-          navigation.navigate("ServicesScreen", {
-            previousServices: selectedServices,
-          })
-        }
-      >
-        <Text style={styles.addMoreButtonText}>ADD MORE</Text>
-      </TouchableOpacity>
 
       <View style={styles.dateTimeContainer}>
         <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>

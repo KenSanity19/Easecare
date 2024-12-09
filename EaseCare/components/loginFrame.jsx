@@ -1,17 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Text, TextInput, Button } from 'react-native-paper';
+import { Text, TextInput, Button, Checkbox } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import { signInWithEmailAndPassword } from 'firebase/auth'; // Firebase Auth import
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../app/firebaseConfig';
 import * as Facebook from 'expo-facebook';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles/loginStyle';
 import HoverableButton from './hoverableButton';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false); // New state for loading animation
+    const [rememberMe, setRememberMe] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Load saved credentials on component mount
+    useEffect(() => {
+        const loadCredentials = async () => {
+            try {
+                const savedEmail = await AsyncStorage.getItem('savedEmail');
+                const savedPassword = await AsyncStorage.getItem('savedPassword');
+
+                if (savedEmail && savedPassword) {
+                    setEmail(savedEmail);
+                    setPassword(savedPassword);
+                    setRememberMe(true);
+                }
+            } catch (error) {
+                console.error('Failed to load saved credentials:', error);
+            }
+        };
+
+        loadCredentials();
+    }, []);
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -19,13 +41,22 @@ const LoginScreen = ({ navigation }) => {
             return;
         }
 
-        setIsLoading(true); // Show the loading spinner
+        setIsLoading(true);
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password); // Use the imported `auth`
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+            // Save credentials if "Remember Me" is checked
+            if (rememberMe) {
+                await AsyncStorage.setItem('savedEmail', email);
+                await AsyncStorage.setItem('savedPassword', password);
+            } else {
+                await AsyncStorage.removeItem('savedEmail');
+                await AsyncStorage.removeItem('savedPassword');
+            }
+
             Alert.alert('Success', `Welcome back, ${user.email}!`);
-            navigation.navigate('ServicesScreen'); // Redirect to the services screen
+            navigation.navigate('ServicesScreen');
         } catch (error) {
             console.error(error);
 
@@ -43,9 +74,6 @@ const LoginScreen = ({ navigation }) => {
                 case 'auth/wrong-password':
                     errorMessage = 'Incorrect password. Please try again.';
                     break;
-                case 'auth/invalid-credential':
-                    errorMessage = 'Invalid login credentials. Please check your email and password.';
-                    break;
                 default:
                     errorMessage = 'An unknown error occurred. Please try again.';
                     break;
@@ -53,15 +81,15 @@ const LoginScreen = ({ navigation }) => {
 
             Alert.alert('Login Failed', errorMessage);
         } finally {
-            setIsLoading(false); // Hide the loading spinner
+            setIsLoading(false);
         }
     };
 
     const handleFacebookLogin = async () => {
-        setIsLoading(true); // Show loading spinner
+        setIsLoading(true);
         try {
             await Facebook.initializeAsync({
-                appId: '935984145151270', // Replace with your Facebook app ID
+                appId: '935984145151270',
             });
 
             const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -71,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
             if (type === 'success') {
                 console.log('Facebook login successful, token:', token);
                 Alert.alert('Success', 'Facebook login successful');
-                navigation.navigate('ServicesScreen'); // Redirect to the services screen
+                navigation.navigate('ServicesScreen');
             } else {
                 Alert.alert('Login Failed', 'Facebook login was cancelled.');
             }
@@ -79,12 +107,11 @@ const LoginScreen = ({ navigation }) => {
             console.error('Facebook Login Error:', error);
             Alert.alert('Login Failed', 'There was an issue with Facebook login.');
         } finally {
-            setIsLoading(false); // Hide the loading spinner
+            setIsLoading(false);
         }
     };
 
     const handleBiometricsLogin = () => {
-        // Biometric login logic placeholder
         console.log('Biometric login initiated');
     };
 
@@ -120,14 +147,25 @@ const LoginScreen = ({ navigation }) => {
                         left={<TextInput.Icon icon={() => <Ionicons name="lock-closed" size={20} color="#6e6e6e" />} />}
                     />
 
-                    <Button
-                        mode="text"
-                        style={styles.forgotPasswordButton}
-                        labelStyle={styles.forgotPasswordLabel}
-                        onPress={() => navigation.navigate('ForgotPasswordScreen')}
-                    >
-                        Forgot Password?
-                    </Button>
+                    <View style={styles.rememberMeForgotPasswordContainer}>
+                        <View style={styles.rememberMeContainer}>
+                            <Checkbox
+                                status={rememberMe ? 'checked' : 'unchecked'}
+                                onPress={() => setRememberMe(!rememberMe)}
+                            />
+                            <Text style={styles.rememberMeText}>Remember Me</Text>
+                        </View>
+
+                        <Button
+                            mode="text"
+                            style={styles.forgotPasswordButton}
+                            labelStyle={styles.forgotPasswordLabel}
+                            onPress={() => navigation.navigate('ForgotPasswordScreen')}
+                        >
+                            Forgot Password?
+                        </Button>
+                    </View>
+
 
                     <HoverableButton
                         mode="contained"

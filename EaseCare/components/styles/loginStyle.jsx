@@ -26,10 +26,28 @@ const styles = StyleSheet.create({
     input: {
         marginBottom: 20,
     },
+    rememberMeForgotPasswordContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 10,
+        paddingHorizontal: 5,
+    },
+    
+    rememberMeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    
+    rememberMeText: {
+        fontSize: 14,
+        color: '#6e6e6e',
+        marginLeft: 5,
+    },
+    
     forgotPasswordButton: {
-        alignSelf: 'flex-start',
-        marginBottom: 20,
-        marginTop: -20,
+        marginLeft: 'auto', // Aligns the button to the right
     },
     pressedButton: {
         backgroundColor: '#4A90E2', 

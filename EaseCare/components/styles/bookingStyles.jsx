@@ -57,18 +57,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         alignSelf: "center",
     },
-    addMoreButton: {
-        backgroundColor: "#f0ad4e",
-        padding: 12,
-        borderRadius: 5,
-        alignItems: "center",
-        marginVertical: 10,
-    },
-    addMoreButtonText: {
-        color: "#fff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
     dateTimePicker: {
         flexDirection: "row",
         justifyContent: "space-between",

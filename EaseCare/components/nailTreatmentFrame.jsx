@@ -4,7 +4,7 @@ import styles from './styles/nailTreatmentStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig';
 
-const NailTreatmentScreen = ({ navigation, route }) => {
+const NailTreatmentScreen = ({ navigation }) => {
     const [services, setServices] = useState([]);
 
     // Fetch nail treatment services from Firebase
@@ -62,10 +62,7 @@ const NailTreatmentScreen = ({ navigation, route }) => {
                             key={service.id || index}
                             style={styles.card}
                             onPress={() =>
-                                navigation.navigate("BookingScreen", {
-                                    service: service,
-                                    previousServices: route.params?.previousServices || [],
-                                })
+                                navigation.navigate("BookingScreen", { service: service })
                             }
                         >
                             <Text style={styles.cardText}>{service.service_name}</Text>
@@ -80,10 +77,7 @@ const NailTreatmentScreen = ({ navigation, route }) => {
                             key={services[4].id || 4} // Use services[4] to display the last service
                             style={styles.card}
                             onPress={() =>
-                                navigation.navigate("BookingScreen", {
-                                    service: services[4], // Pass the correct service
-                                    previousServices: route.params?.previousServices || [],
-                                })
+                                navigation.navigate("BookingScreen", { service: services[4] })
                             }
                         >
                             <Text style={styles.cardText}>{services[4].service_name}</Text>

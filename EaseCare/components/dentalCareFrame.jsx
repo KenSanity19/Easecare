@@ -4,7 +4,7 @@ import styles from './styles/dentalCareStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const DentalCareScreen = ({ navigation, route }) => {
+const DentalCareScreen = ({ navigation }) => {
     const [services, setServices] = useState([]);
 
     // Function to fetch services with service_group_id = 1 from Firebase
@@ -15,7 +15,6 @@ const DentalCareScreen = ({ navigation, route }) => {
 
             if (snapshot.exists()) {
                 const servicesData = snapshot.val();
-                console.log("Fetched services:", servicesData);
 
                 // Filter services with service_group_id = 1
                 const filteredServices = Object.values(servicesData).filter(
@@ -69,18 +68,17 @@ const DentalCareScreen = ({ navigation, route }) => {
                 ) : (
                     <View style={styles.gridContainer}>
                         {services.map((service, index) => (
-                        <TouchableOpacity
-                        key={service.id || index}
-                        style={styles.card}
-                        onPress={() =>
-                            navigation.navigate("BookingScreen", {
-                            service: service,
-                            previousServices: route.params?.previousServices || [], 
-                            })
-                            }
-                        >
-                        <Text style={styles.cardText}>{service.service_name}</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                key={service.id || index}
+                                style={styles.card}
+                                onPress={() =>
+                                    navigation.navigate("BookingScreen", {
+                                        service: service,
+                                    })
+                                }
+                            >
+                                <Text style={styles.cardText}>{service.service_name}</Text>
+                            </TouchableOpacity>
                         ))}
                     </View>
                 )}
