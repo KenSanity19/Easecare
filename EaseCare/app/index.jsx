@@ -13,6 +13,8 @@ import BeautyParlourScreen from '../components/beautyParlourFrame';
 import NailTreatmentScreen from '../components/nailTreatmentFrame';
 import HealthWellnessScreen from '../components/healthWellnessFrame';
 import BookingScreen from '../components/bookingFrame';
+import PaymentScreen from '../components/paymentFrame';
+import BookingConfirmedScreen from '../components/bookingSuccessFrame';
 import HomePage from '../components/home';
 import SettingsScreen from '../components/settings';
 import ProfileScreen from '../components/profile';
@@ -53,6 +55,8 @@ export default function App() {
                     <Stack.Screen name="NailTreatmentScreen" component={NailTreatmentScreen} options={{ title: 'Nail Treatment' }} />
                     <Stack.Screen name="HealthWellnessScreen" component={HealthWellnessScreen} options={{ title: 'Health and Wellness' }} />
                     <Stack.Screen name="BookingScreen" component={BookingScreen} options={{ title: 'Booking' }} />
+                    <Stack.Screen name="PaymentScreen" component={PaymentScreen} options={{ title: 'Payment Method' }} />
+                    <Stack.Screen name="BookingConfirmedScreen" component={BookingConfirmedScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ title: 'Settings' }} />
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />  
                     <Stack.Screen name="NotificationScreen" component={NotificationScreen}  options={{ title: 'Notification' }} /> 

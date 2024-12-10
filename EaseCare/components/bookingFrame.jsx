@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
+import { getDatabase, ref, get, child } from "firebase/database";
+import { getAuth } from "firebase/auth";
 import styles from "./styles/bookingStyles";
 
-const BookingScreen = ({ route }) => {
+const BookingScreen = ({ navigation, route }) => {
   const { service, previousServices = [] } = route.params || {};
 
   const [selectedServices, setSelectedServices] = useState(previousServices);
@@ -18,6 +20,7 @@ const BookingScreen = ({ route }) => {
     setSelectedGender(gender);
   };
 
+  // Load services if any from route params
   useEffect(() => {
     if (service) {
       setSelectedServices((prevServices) => {
@@ -47,6 +50,60 @@ const BookingScreen = ({ route }) => {
     );
     hideTimePicker();
   };
+
+  // Fetch user address from Firebase
+  const handleBooking = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      alert("User is not logged in!");
+      return;
+    }
+  
+    const userId = user.uid; // Get logged-in user's ID
+    const dbRef = ref(getDatabase());
+  
+    try {
+      // Fetch tbl_customer node
+      const snapshot = await get(child(dbRef, "tbl_customer"));
+  
+      if (snapshot.exists()) {
+        const customers = snapshot.val();
+  
+        // Search for logged-in user's record by UID or email
+        let userRecord = customers[userId]; // If keys match UID directly
+        if (!userRecord) {
+          // Search by email/username
+          for (const key in customers) {
+            if (customers[key].username === user.email) {
+              userRecord = customers[key];
+              break;
+            }
+          }
+        }
+  
+        if (userRecord) {
+          const address = userRecord.address;
+          navigation.navigate("PaymentScreen", {
+            selectedGender,
+            selectedServices,
+            selectedDate,
+            selectedTime,
+            location: address,
+          });
+        } else {
+          alert("User data not found!");
+        }
+      } else {
+        alert("No customers found in the database!");
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+      alert("Failed to fetch user data!");
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -149,7 +206,7 @@ const BookingScreen = ({ route }) => {
 
       <TouchableOpacity
         style={styles.bookButton}
-        onPress={() => {
+        onPress={async () => {
           if (!selectedGender) {
             alert("Please select an aider.");
             return;
@@ -158,7 +215,16 @@ const BookingScreen = ({ route }) => {
             alert("Please select at least one service.");
             return;
           }
-          alert("Booking Confirmed!");
+          if (!selectedDate) {
+            alert("Please select a date.");
+            return;
+          }
+          if (!selectedTime) {
+            alert("Please select a time.");
+            return;
+          }
+
+          await handleBooking();
         }}
       >
         <Text style={styles.bookButtonText}>BOOK NOW</Text>
