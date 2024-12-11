@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Image, FlatList, ImageBackground, ScrollView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getDatabase, ref, get, child } from "firebase/database";
@@ -8,7 +8,7 @@ import styles from "./styles/bookingStyles";
 
 const BookingScreen = ({ navigation, route }) => {
   const { service, previousServices = [] } = route.params || {};
-
+ 
   const [selectedServices, setSelectedServices] = useState(previousServices);
   const [selectedGender, setSelectedGender] = useState(null);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -106,7 +106,7 @@ const BookingScreen = ({ navigation, route }) => {
   
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.header}>What aider do you prefer?</Text>
       <View style={styles.genderSelector}>
         <TouchableOpacity
@@ -229,7 +229,12 @@ const BookingScreen = ({ navigation, route }) => {
       >
         <Text style={styles.bookButtonText}>BOOK NOW</Text>
       </TouchableOpacity>
-    </View>
+      <ImageBackground
+        source={require("../assets/images/topImage.png")}
+        style={styles.bottomImage}
+        resizeMode="cover"
+      />
+    </ScrollView>
   );
 };
 

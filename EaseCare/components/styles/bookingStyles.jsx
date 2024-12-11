@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window'); // Get device width
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     priceText: {
         fontSize: 16,
         color: "#555",
-        textAlign: 'center',
+        textAlign: "center",
     },
     genderSelector: {
         flexDirection: "row",
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         marginBottom: 5,
-        borderRadius: 40, 
+        borderRadius: 40,
     },
     genderText: {
         fontSize: 16,
@@ -79,9 +80,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 10,
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#FFD700", // Added yellow background
         marginBottom: 20,
-        alignItems: "center", 
+        alignItems: "center",
     },
     bookButton: {
         backgroundColor: '#007bff',
@@ -89,8 +90,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 20,
+        zIndex: 1, // Ensure the "BOOK NOW" button is above other content
     },
-
     bookButtonText: {
         color: "#fff",
         fontWeight: "bold",
@@ -118,9 +119,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         backgroundColor: "#fff",
-        width: "48%", // Adjust width to fit two fields in one row
+        width: "48%",
         justifyContent: "space-between",
-    },  
+    },
     timeInput: {
         flexDirection: "row",
         alignItems: "center",
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         backgroundColor: "#fff",
-        width: "48%", // Adjust width to fit two fields in one row
+        width: "48%",
         justifyContent: "space-between",
     },
     dateText: {
@@ -142,7 +143,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#555",
     },
-
+    additionalImages: { // New styles for images under the Book Now button
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        marginTop: 20,
+    },
+    additionalImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+    },
+    bottomImage: {
+        position: "absolute", // Sticks the image to a specific position
+        bottom: -210,            // Keep it aligned to the bottom
+        marginTop: 60,     // Push the image slightly upward
+        left: -20,          // Slightly move to the left
+        width: "110%",        // Cover the full width of the screen
+        height: height * 0.5, // Cover 30% of the screen height (adjust as needed)
+        resizeMode: "cover",  // Ensure the image proportionally fills its container
+        zIndex: -1,           // Ensure it's behind other content
+      },
+    
 });
 
 export default styles;
