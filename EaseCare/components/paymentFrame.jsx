@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Image, ImageBackground } from 'react-native';
 import styles from './styles/paymentStyles';
 
 const PaymentScreen = ({ navigation, route }) => {
@@ -18,7 +18,7 @@ const PaymentScreen = ({ navigation, route }) => {
     // Payment methods data with image sources
     const paymentMethods = [
         { id: 'gcash', name: 'GCash', logo: require('../assets/images/gcash.png') },
-        { id: 'paypal', name: 'PayPal',  logo: require('../assets/images/paypal.png') },
+        { id: 'paypal', name: 'PayPal', logo: require('../assets/images/paypal.png') },
         { id: 'cash', name: 'Cash Payment', logo: require('../assets/images/cash1.png') }, // Placeholder logo for cash
     ];
 
@@ -68,8 +68,12 @@ const PaymentScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Payment Method</Text>
-            <Text style={styles.subHeader}>Choose payment method</Text>
+             <ImageBackground
+                source={require('../assets/images/topImage.png')}
+                style={styles.topImage}
+                resizeMode="cover"/>
+
+            <Text style={styles.header}>Choose payment method</Text>
 
             {/* Show loading spinner or FlatList based on isLoading */}
             {isLoading ? (
@@ -87,7 +91,12 @@ const PaymentScreen = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </>
             )}
+            <ImageBackground
+                source={require('../assets/images/bottomImage.png')}
+                style={styles.bottomImage}
+                resizeMode="cover"/>
         </View>
+        
     );
 };
 

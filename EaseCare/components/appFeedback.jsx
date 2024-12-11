@@ -164,10 +164,10 @@ const FeedbackScreen = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>SUBMIT FEEDBACK</Text>
         </TouchableOpacity>
-      </View>
       <ImageBackground
         source={require("../assets/images/topImage.png")}
         style={styles.bottomImage}

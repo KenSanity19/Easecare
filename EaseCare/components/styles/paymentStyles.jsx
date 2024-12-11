@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -6,22 +8,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingTop: 40,
+        overflow: 'visible', // Ensure children outside bounds are visible
     },
+    
     header: {
-        fontSize: 24,
+        top: 130,
+        fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
+        zIndex: 3,
     },
-    subHeader: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
+
     paymentList: {
         flex: 1,
+        marginTop: 150, // Add some space at the top
     },
+    
     paymentMethod: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -65,19 +68,43 @@ const styles = StyleSheet.create({
         backgroundColor: '#007bff',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        marginBottom: 50,
+        marginBottom: 180,
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: 10,
         alignItems: 'center',
+        zIndex: 3,
     },
     selectButtonText: {
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
     },
+    
     loadingSpinner: {
         marginTop: 20,
     },
+
+    topImage: {
+        position: 'absolute',
+        top: 0,
+        left: (width - 400) / 2, 
+        height: 300,
+        width: 400, 
+        transform: [{ rotate: '180deg' }],
+        opacity: 0.8,
+        zIndex: 1, 
+    },
+    bottomImage: {
+        position: 'absolute',
+        bottom: -50,
+        left: (width - 400) / 2, 
+        height: 700,
+        width: 400,
+        zIndex: 1,
+        opacity: 0.8,
+
+    },
+    
 });
 
 export default styles;
