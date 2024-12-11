@@ -43,7 +43,8 @@ const SettingsScreen = ({ navigation }) => {
       {/* Feedback */}
       <TouchableOpacity
         style={styles.item}
-        onPress={() => navigation.navigate("FeedbackScreen")}>
+        onPress={() => navigation.navigate("FeedbackScreen")}
+      >
         <MaterialIcons name="feedback" size={24} color="#ffc107" />
         <View style={styles.textContainer}>
           <Text style={styles.title}>Feedback</Text>
@@ -55,16 +56,29 @@ const SettingsScreen = ({ navigation }) => {
 
       {/* Logout */}
       <TouchableOpacity
-  
         style={styles.item}
         onPress={() => {
             console.log("Logout pressed");
             navigation.navigate("LoginScreen"); // Navigate to Feedback
         }}
-        >
+      >
         <MaterialIcons name="logout" size={24} color="#03a9f4" />
         <View style={styles.textContainer}>
           <Text style={styles.title}>Logout</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* Feedback Button Below Logout */}
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => navigation.navigate("BookingSuccesscreen")}
+      >
+        <MaterialIcons name="feedback" size={24} color="#ffc107" />
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>Aider Feedback</Text>
+          <Text style={styles.subtitle}>
+            Send feedback about your experience with an aider.
+          </Text>
         </View>
       </TouchableOpacity>
 

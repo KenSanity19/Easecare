@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styles from "./styles/bookingSuccessStyles";
+import styles from "./styles/bookingConfirmedStyles";
 
 const BookingConfirmedScreen = ({ route }) => {
     const navigation = useNavigation();

@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         width: "110%",        // Cover the full width of the screen
         height: height * 0.5, // Cover 30% of the screen height (adjust as needed)
         resizeMode: "cover",  // Ensure the image proportionally fills its container
-        zIndex: -1,           // Ensure it's behind other content
+        zIndex: -10,           // Ensure it's behind other content
       },
     
 });
