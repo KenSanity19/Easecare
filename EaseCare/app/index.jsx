@@ -15,6 +15,7 @@ import HealthWellnessScreen from '../components/healthWellnessFrame';
 import BookingScreen from '../components/bookingFrame';
 import PaymentScreen from '../components/paymentFrame';
 import BookingConfirmedScreen from '../components/bookingSuccessFrame';
+import AiderScreen from '../components/aiderProfileFrame';
 import HomePage from '../components/home';
 import SettingsScreen from '../components/settings';
 import ProfileScreen from '../components/profile';
@@ -57,6 +58,7 @@ export default function App() {
                     <Stack.Screen name="BookingScreen" component={BookingScreen} options={{ title: 'Booking' }} />
                     <Stack.Screen name="PaymentScreen" component={PaymentScreen} options={{ title: 'Payment Method' }} />
                     <Stack.Screen name="BookingConfirmedScreen" component={BookingConfirmedScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="AiderScreen" component={AiderScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ title: 'Settings' }} />
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen}  options={{ headerShown: false }} />  
                     <Stack.Screen name="NotificationScreen" component={NotificationScreen}  options={{ title: 'Notification' }} /> 

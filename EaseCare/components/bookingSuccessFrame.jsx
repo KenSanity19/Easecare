@@ -60,7 +60,7 @@ const BookingConfirmedScreen = ({ route }) => {
                 </Text>
                 <TouchableOpacity
                     style={styles.viewProfileButton}
-                    onPress={() => navigation.navigate("AiderProfileScreen")}
+                    onPress={() => navigation.navigate("AiderScreen", { selectedServices, selectedGender })}
                 >
                     <Text style={styles.buttonText}>VIEW AIDER PROFILE</Text>
                 </TouchableOpacity>
