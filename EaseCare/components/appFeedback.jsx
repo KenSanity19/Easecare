@@ -21,15 +21,16 @@ const FeedbackScreen = ({ navigation }) => {
     easeOfUse: "",
     suggestion: "",
   });
-  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [customerId, setCustomerId] = useState(""); // To store the customer_id
 
   const handleRating = (setRating, value) => {
     setRating(value);
   };
 
-  // Fetch the current user's name
+  // Fetch the current user's name and customer ID
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchCustomerData = async () => {
       const auth = getAuth();
       const user = auth.currentUser;
 
@@ -38,7 +39,7 @@ const FeedbackScreen = ({ navigation }) => {
         return;
       }
 
-      const userId = user.uid;
+      const userEmail = user.email; // Get the logged-in user's email
       const dbRef = ref(getDatabase());
 
       try {
@@ -46,12 +47,23 @@ const FeedbackScreen = ({ navigation }) => {
 
         if (snapshot.exists()) {
           const customers = snapshot.val();
-          const userRecord = customers[userId] || Object.values(customers).find((c) => c.username === user.email);
 
-          if (userRecord) {
-            setUsername(userRecord.username || "Unknown User");
+          // Find the user record matching the email
+          const userEntry = Object.entries(customers).find(
+            ([key, customer]) => customer.username === userEmail
+          );
+
+          if (userEntry) {
+            const [id, userRecord] = userEntry;
+            const { firstName, middleName, lastName } = userRecord;
+
+            setCustomerId(id); // Save the customer_id
+            const name = `${firstName || ""} ${middleName || ""} ${
+              lastName || ""
+            }`.trim();
+            setFullName(name);
           } else {
-            Alert.alert("Error", "User data not found!");
+            Alert.alert("Error", "User data not found in the database!");
           }
         } else {
           Alert.alert("Error", "No customer data found in the database!");
@@ -62,7 +74,7 @@ const FeedbackScreen = ({ navigation }) => {
       }
     };
 
-    fetchUsername();
+    fetchCustomerData();
   }, []);
 
   const handleSubmit = async () => {
@@ -74,14 +86,18 @@ const FeedbackScreen = ({ navigation }) => {
 
     try {
       const db = getDatabase();
-      const feedbackRef = ref(db, "tbl_feedback");
+      const feedbackRef = ref(db, "tbl_app_feedback"); // Save to tbl_app_feedback
 
       const newFeedback = {
-        name: username,
+        customer_id: customerId || "Unknown", // Include customer_id
+        name: fullName || "Unknown User",
         feedback: `${feedback.easeOfUse} - ${feedback.suggestion}`,
         ratings: `App: ${appRating}, Service: ${serviceRating}`,
         date: new Date().toISOString().split("T")[0],
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
 
       await push(feedbackRef, newFeedback);
