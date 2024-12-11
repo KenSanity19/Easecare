@@ -24,7 +24,7 @@ import SecurityScreen from '../components/security';
 import ChangePasswordScreen from '../components/changepass';
 import PassSuccessScreen from '../components/changepassSucc';
 import AccountDetailsScreen from '../components/accountdetails';
-import FeedbackScreen from '../components/feedback';
+import FeedbackScreen from '../components/appFeedback';
 import FeedbackSuccessScreen from '../components/FeedbackSuccess';
 
 const Stack = createStackNavigator();
