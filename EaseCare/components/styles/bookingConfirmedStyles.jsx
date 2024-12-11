@@ -1,4 +1,5 @@
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -8,17 +9,31 @@ const styles = StyleSheet.create({
     confirmationHeader: {
         alignItems: "center",
         marginBottom: 20,
+        flexDirection: "column",
+        justifyContent: 'center',
+        marginTop: 50,
     },
     confirmationIcon: {
         width: 80,
         height: 80,
         marginBottom: 10,
     },
+    headerWithText: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: 'center',
+    },
     headerText: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: "bold",
         color: "#333333",
-        marginBottom: 5,
+        marginBottom: 10,
+    },
+    easeCareText: {
+        fontSize: 35,
+        fontWeight: "bold",
+        color: "#333333",
+        marginLeft: 5, // Adjust the space between the image and the "EaseCare" text
     },
     subHeaderText: {
         fontSize: 14,
@@ -32,7 +47,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     detailText: {
-        fontSize: 16,
+        fontSize: 20,
         color: "#333333",
         marginBottom: 5,
     },
@@ -49,10 +64,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     logo: {
-        width: 150,
-        height: 40,
+        width: 80,
+        height: 75,
         resizeMode: "contain",
-        marginBottom: 10,
+    
+        
     },
     tagline: {
         fontSize: 12,
@@ -63,13 +79,18 @@ const styles = StyleSheet.create({
     viewProfileButton: {
         backgroundColor: "#007BFF",
         padding: 15,
+        paddingRight: 50,
+        paddingLeft: 50,
         borderRadius: 5,
+       
+        
     },
     buttonText: {
         color: "#FFFFFF",
         fontSize: 16,
         fontWeight: "bold",
         textAlign: "center",
+        
     },
 });
 

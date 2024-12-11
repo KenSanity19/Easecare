@@ -237,5 +237,5 @@ const BookingScreen = ({ navigation, route }) => {
     </ScrollView>
   );
 };
-
+ 
 export default BookingScreen;

@@ -21,6 +21,7 @@ const BookingConfirmedScreen = ({ route }) => {
                     source={require("../assets/images/Check.png")}
                     style={styles.confirmationIcon}
                 />
+              
                 <Text style={styles.headerText}>BOOKING CONFIRMED</Text>
                 <Text style={styles.subHeaderText}>
                     Your appointment has been successfully booked.
@@ -51,10 +52,13 @@ const BookingConfirmedScreen = ({ route }) => {
 
             <View style={styles.footerContainer}>
                 <Text style={styles.thankYouText}>Thank you for choosing our services.</Text>
-                <Image
-                    source={require("../assets/images/logo.png")}
-                    style={styles.logo}
-                />
+                <View style={styles.headerWithText}>
+                    <Image
+                        source={require("../assets/images/logo.png")}
+                        style={styles.logo}
+                    />
+                    <Text style={styles.easeCareText}>EaseCare</Text>
+                </View>
                 <Text style={styles.tagline}>
                     "Accessible Home Services for Persons with Special Needs"
                 </Text>
