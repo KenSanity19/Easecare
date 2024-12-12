@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     paymentList: {
         flex: 1,
         marginTop: 150, // Add some space at the top
+        zIndex: 3,
     },
     
     paymentMethod: {
@@ -34,9 +35,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#ddd',
+        zIndex: 3,
     },
     selectedMethod: {
         borderColor: '#4CAF50',
+        zIndex: 3,
     },
     paymentLogo: {
         fontSize: 24,

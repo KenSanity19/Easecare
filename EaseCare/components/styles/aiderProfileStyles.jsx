@@ -1,75 +1,55 @@
 import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
         padding: 20,
+        alignItems: "center",  // Center everything horizontally
+        justifyContent: "center", // Center everything vertically
     },
-    header: {
-        alignItems: "center",
-        marginBottom: 20,
+    profileContainer: {
+        alignItems: "center",  // Center the content horizontally
+        marginBottom: 20,  // Space between each profile item
     },
     profileImage: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        marginBottom: 10,
+        width: 100, // Adjust the size as necessary
+        height: 100,
+        borderRadius: 50, // Make it circular
+        marginBottom: 10, // Space between image and text
     },
     name: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: "bold",
-        color: "#FF6F00",
-    },
-    specialization: {
-        fontSize: 14,
-        textAlign: "center",
-        color: "#666",
+        color: "#007BFF",
+        textAlign: "center",  // Center the text
         marginVertical: 5,
     },
-    rating: {
+    specialization: {
         fontSize: 16,
-        marginTop: 5,
-        color: "#FFD700",
-    },
-    ratingText: {
-        fontSize: 14,
-        color: "#000",
-    },
-    feedbackContainer: {
-        flex: 1,
-        marginBottom: 20,
-    },
-    feedbackItem: {
-        backgroundColor: "#f9f9f9",
-        padding: 15,
-        marginVertical: 8,
-        borderRadius: 10,
-    },
-    feedbackName: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginBottom: 5,
-    },
-    feedbackComment: {
-        fontSize: 14,
-        color: "#555",
-    },
-    feedbackRating: {
-        marginTop: 5,
-        fontSize: 14,
-        color: "#FFD700",
+        textAlign: "center",  // Center the specialization
+        color: "#666",
+        marginVertical: 5,
     },
     button: {
         backgroundColor: "#007BFF",
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
+        marginTop: 20,
+        width: "80%", // Center-align button and limit its width
     },
     buttonText: {
         color: "#fff",
         fontSize: 16,
         fontWeight: "bold",
     },
+    noAiderText: {
+        fontSize: 16,
+        color: "#FF0000", // Red color to indicate no results
+        textAlign: "center",  // Center the text
+        marginTop: 20,
+    }
 });
 
 export default styles;

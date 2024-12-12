@@ -1,91 +1,220 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Image, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, Image, ImageBackground, Alert } from 'react-native';
 import styles from './styles/paymentStyles';
+import { getDatabase, ref, push, get, child, set } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
 const PaymentScreen = ({ navigation, route }) => {
     const [currentMethod, setCurrentMethod] = useState('Cash Payment');
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [isLoading, setIsLoading] = useState(false);
+    const [customerId, setCustomerId] = useState('');
+    const [serviceId, setServiceId] = useState('');
 
-    // Extract booking details from route params
     const {
-        selectedGender,
-        selectedServices,
-        selectedDate,
-        selectedTime,
-        location,
-    } = route.params;
+        selectedGender = '',
+        selectedService = null, // Single service selected
+        selectedDate = '',
+        selectedTime = '',
+        location = '',
+    } = route?.params || {}; // Use optional chaining to prevent undefined errors
 
-    // Payment methods data with image sources
+    // Define payment methods array
     const paymentMethods = [
         { id: 'gcash', name: 'GCash', logo: require('../assets/images/gcash.png') },
         { id: 'paypal', name: 'PayPal', logo: require('../assets/images/paypal.png') },
-        { id: 'cash', name: 'Cash Payment', logo: require('../assets/images/cash1.png') }, // Placeholder logo for cash
+        { id: 'cash', name: 'Cash Payment', logo: require('../assets/images/cash1.png') },
     ];
 
+    // Fetch customer ID from the database
+    useEffect(() => {
+        const fetchCustomerId = async () => {
+            const auth = getAuth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                Alert.alert('Error', 'User is not logged in!');
+                return;
+            }
+
+            const userEmail = user.email;
+            const dbRef = ref(getDatabase());
+
+            try {
+                const snapshot = await get(child(dbRef, 'tbl_customer'));
+
+                if (snapshot.exists()) {
+                    const customers = snapshot.val();
+                    const userEntry = Object.entries(customers).find(
+                        ([, customer]) => customer.username === userEmail
+                    );
+
+                    if (userEntry) {
+                        const [id] = userEntry;
+                        setCustomerId(id);
+                    } else {
+                        Alert.alert('Error', 'User data not found in the database!');
+                    }
+                } else {
+                    Alert.alert('Error', 'No customer data found in the database!');
+                }
+            } catch (error) {
+                console.error('Error fetching customer ID:', error);
+                Alert.alert('Error', 'Failed to fetch customer data!');
+            }
+        };
+
+        fetchCustomerId();
+    }, []);
+
+    // Fetch service ID from the database based on the selected service name
+    useEffect(() => {
+        const fetchServiceId = async () => {
+            if (!selectedService || !selectedService.service_name) {
+                Alert.alert('Error', 'Selected service is invalid!');
+                return;
+            }
+
+            const dbRef = ref(getDatabase());
+
+            try {
+                const snapshot = await get(child(dbRef, 'tbl_services'));
+
+                if (snapshot.exists()) {
+                    const services = snapshot.val();
+                    const serviceEntry = Object.entries(services).find(
+                        ([, service]) => service.service_name === selectedService.service_name
+                    );
+
+                    if (serviceEntry) {
+                        const [id] = serviceEntry;
+                        setServiceId(id);
+                    } else {
+                        Alert.alert('Error', 'Selected service not found in the database!');
+                    }
+                } else {
+                    Alert.alert('Error', 'No services found in the database!');
+                }
+            } catch (error) {
+                console.error('Error fetching service ID:', error);
+                Alert.alert('Error', 'Failed to fetch service data!');
+            }
+        };
+
+        fetchServiceId();
+    }, [selectedService]);
+
+    // Handle payment method selection
     const handleSelect = (methodName) => {
         setCurrentMethod(methodName);
     };
 
-    const renderItem = ({ item }) => (
-        <TouchableOpacity
-            style={[
-                styles.paymentMethod,
-                currentMethod === item.name && styles.selectedMethod,
-            ]}
-            onPress={() => handleSelect(item.name)}
-        >
-            {/* Payment method logo */}
-            <Image source={item.logo} style={styles.paymentLogoImage} />
-            <View style={styles.paymentDetails}>
-                <Text style={styles.paymentName}>{item.name}</Text>
-                {item.detail ? <Text style={styles.paymentDetail}>{item.detail}</Text> : null}
-            </View>
-            {currentMethod === item.name && <Text style={styles.selectedIcon}>✔</Text>}
-        </TouchableOpacity>
-    );
-
-    const handleConfirmPayment = async () => {
-        setIsLoading(true); // Show loading spinner
+    // Save booking data to the database
+    const saveBookingToDatabase = async () => {
+        if (!serviceId) {
+            throw new Error('Service ID is not available.');
+        }
+    
         try {
-            // Simulate a network request delay
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            const db = getDatabase();
+            const bookingsRef = ref(db, 'tbl_booking');
+    
+            // Fetch existing bookings to determine the next key
+            const snapshot = await get(bookingsRef);
+    
+            let newKey = 'B1'; // Default key if no bookings exist
+            if (snapshot.exists()) {
+                const bookings = snapshot.val();
+                const keys = Object.keys(bookings).filter(key => key.startsWith('B'));
+                const numericKeys = keys.map(key => parseInt(key.substring(1), 10));
+                const maxKey = Math.max(...numericKeys);
+                newKey = `B${maxKey + 1}`; // Generate the next key
+            }
+    
+            const bookingData = {
+                booking_date: selectedDate,
+                booking_time: selectedTime,
+                status: 'Pending',
+                location: location,
+                admin_id: null,
+                customer_id: customerId,
+                service_id: serviceId, // Save the service_id instead of service_name
+                payment_method: currentMethod,
+            };
+    
+            // Save the booking with the generated key
+            const newBookingRef = ref(db, `tbl_booking/${newKey}`);
+            await set(newBookingRef, bookingData);
+    
+            console.log('Booking saved successfully with key:', newKey);
+        } catch (error) {
+            console.error('Error saving booking:', error);
+            throw error;
+        }
+    };
+    
 
-            // Navigate to BookingConfirmedScreen with all necessary parameters
+    // Handle payment confirmation
+    // Handle payment confirmation
+    const handleConfirmPayment = async () => {
+        setIsLoading(true);
+
+        try {
+            await saveBookingToDatabase();
             navigation.navigate('BookingConfirmedScreen', {
                 selectedGender,
-                selectedServices,
                 selectedDate,
                 selectedTime,
                 location,
-                modeOfPayment: currentMethod, // Pass selected mode of payment
+                modeOfPayment: currentMethod,
+                serviceName: selectedService?.service_name || "Not selected", // Pass service_name
             });
         } catch (error) {
             console.error('Payment confirmation error:', error);
+            Alert.alert('Error', error.message);
         } finally {
-            setIsLoading(false); // Hide loading spinner
+            setIsLoading(false);
         }
     };
 
+    
+
+    // Fallback for when paymentMethods is not available (ensuring we don't call .map on undefined)
+    if (!Array.isArray(paymentMethods) || paymentMethods.length === 0) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.header}>Error: Payment methods not available</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
-             <ImageBackground
+            <ImageBackground
                 source={require('../assets/images/topImage.png')}
                 style={styles.topImage}
-                resizeMode="cover"/>
-
+                resizeMode="cover"
+            />
             <Text style={styles.header}>Choose payment method</Text>
-
-            {/* Show loading spinner or FlatList based on isLoading */}
             {isLoading ? (
                 <ActivityIndicator size="large" color="#0000ff" style={styles.loadingSpinner} />
             ) : (
                 <>
-                    <FlatList
-                        data={paymentMethods}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
-                        style={styles.paymentList}
-                    />
+                    <View style={styles.paymentList}>
+                        {/* Check if paymentMethods is defined before using .map() */}
+                        {paymentMethods.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                style={[styles.paymentMethod, currentMethod === item.name && styles.selectedMethod]}
+                                onPress={() => handleSelect(item.name)}
+                            >
+                                <Image source={item.logo} style={styles.paymentLogoImage} />
+                                <View style={styles.paymentDetails}>
+                                    <Text style={styles.paymentName}>{item.name}</Text>
+                                </View>
+                                {currentMethod === item.name && <Text style={styles.selectedIcon}>✔</Text>}
+                            </TouchableOpacity>
+                        ))}
+                    </View>
                     <TouchableOpacity style={styles.selectButton} onPress={handleConfirmPayment}>
                         <Text style={styles.selectButtonText}>SELECT</Text>
                     </TouchableOpacity>
@@ -94,9 +223,9 @@ const PaymentScreen = ({ navigation, route }) => {
             <ImageBackground
                 source={require('../assets/images/bottomImage.png')}
                 style={styles.bottomImage}
-                resizeMode="cover"/>
+                resizeMode="cover"
+            />
         </View>
-        
     );
 };
 

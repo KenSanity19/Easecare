@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles/bookingConfirmedStyles";
 
@@ -7,12 +7,12 @@ const BookingConfirmedScreen = ({ route }) => {
     const navigation = useNavigation();
     const {
         selectedGender,
-        selectedServices,
         selectedDate,
         selectedTime,
         location,
         modeOfPayment,
-    } = route.params || {};
+        serviceName = "Not selected", // Accept serviceName from route params
+    } = route.params || {}; // Destructure with fallback for params
 
     return (
         <View style={styles.container}>
@@ -21,7 +21,6 @@ const BookingConfirmedScreen = ({ route }) => {
                     source={require("../assets/images/Check.png")}
                     style={styles.confirmationIcon}
                 />
-              
                 <Text style={styles.headerText}>BOOKING CONFIRMED</Text>
                 <Text style={styles.subHeaderText}>
                     Your appointment has been successfully booked.
@@ -40,7 +39,7 @@ const BookingConfirmedScreen = ({ route }) => {
                     <Text style={styles.detailLabel}>Location:</Text> {location || "Not provided"}
                 </Text>
                 <Text style={styles.detailText}>
-                    <Text style={styles.detailLabel}>Service:</Text> {selectedServices.map(service => service.service_name).join(", ") || "Not selected"}
+                    <Text style={styles.detailLabel}>Service:</Text> {serviceName}
                 </Text>
                 <Text style={styles.detailText}>
                     <Text style={styles.detailLabel}>Gender Preference:</Text> {selectedGender || "Not selected"}
@@ -64,7 +63,7 @@ const BookingConfirmedScreen = ({ route }) => {
                 </Text>
                 <TouchableOpacity
                     style={styles.viewProfileButton}
-                    onPress={() => navigation.navigate("AiderScreen", { selectedServices, selectedGender })}
+                    onPress={() => navigation.navigate("AiderScreen", { serviceName, selectedGender })}
                 >
                     <Text style={styles.buttonText}>VIEW AIDER PROFILE</Text>
                 </TouchableOpacity>
