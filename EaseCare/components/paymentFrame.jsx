@@ -111,6 +111,7 @@ const PaymentScreen = ({ navigation, route }) => {
     };
 
     // Save booking data to the database
+    // Save booking data to the database
     const saveBookingToDatabase = async () => {
         if (!serviceId) {
             throw new Error('Service ID is not available.');
@@ -140,7 +141,6 @@ const PaymentScreen = ({ navigation, route }) => {
                 admin_id: null,
                 customer_id: customerId,
                 service_id: serviceId, // Save the service_id instead of service_name
-                payment_method: currentMethod,
                 aider_id: aider_id || null, // Save aider_id (if available)
             };
 
