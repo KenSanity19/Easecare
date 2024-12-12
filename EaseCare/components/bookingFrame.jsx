@@ -40,22 +40,22 @@ const BookingScreen = ({ navigation, route }) => {
   const handleBooking = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (!user) {
       alert("User is not logged in!");
       return;
     }
-
+  
     const userId = user.uid; // Get logged-in user's ID
     const dbRef = ref(getDatabase());
-
+  
     try {
       // Fetch tbl_customer node
       const snapshot = await get(child(dbRef, "tbl_customer"));
-
+  
       if (snapshot.exists()) {
         const customers = snapshot.val();
-
+  
         // Search for logged-in user's record by UID or email
         let userRecord = customers[userId]; // If keys match UID directly
         if (!userRecord) {
@@ -67,22 +67,47 @@ const BookingScreen = ({ navigation, route }) => {
             }
           }
         }
-
+  
         if (userRecord) {
           const address = userRecord.address;
-
-          // Navigate to PaymentScreen, passing all booking details including service_id
-          navigation.navigate("PaymentScreen", {
-            selectedGender,
-            selectedService: {
-              service_id: service.id || service.service_id,  // Pass service_id directly
-              service_name: service.service_name,
-              price: service.price,
-            },
-            selectedDate,
-            selectedTime,
-            location: address,
-          });
+  
+          // Fetch tbl_aider node
+          const aiderSnapshot = await get(child(dbRef, "tbl_aider"));
+  
+          if (aiderSnapshot.exists()) {
+            const aiders = aiderSnapshot.val();
+  
+            // Find the aider_id that matches the selected sex and service
+            let selectedAiderId = null;
+  
+            for (const key in aiders) {
+              const aider = aiders[key];
+              if (aider.sex === selectedGender && aider.service_id === service.id) {
+                selectedAiderId = key; // Store the aider_id
+                break;
+              }
+            }
+  
+            if (selectedAiderId) {
+              // Navigate to PaymentScreen with the selected aider_id
+              navigation.navigate("PaymentScreen", {
+                selectedGender,
+                selectedService: {
+                  service_id: service.id || service.service_id,  // Pass service_id directly
+                  service_name: service.service_name,
+                  price: service.price,
+                },
+                selectedDate,
+                selectedTime,
+                location: address,
+                aider_id: selectedAiderId, // Pass the selected aider_id
+              });
+            } else {
+              alert("No aider found with the selected sex and service.");
+            }
+          } else {
+            alert("No aiders found in the database!");
+          }
         } else {
           alert("User data not found!");
         }
@@ -94,6 +119,7 @@ const BookingScreen = ({ navigation, route }) => {
       alert("Failed to fetch user data!");
     }
   };
+  
 
   return (
     <ScrollView style={styles.container}>

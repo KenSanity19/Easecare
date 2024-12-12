@@ -9,6 +9,7 @@ const PaymentScreen = ({ navigation, route }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [customerId, setCustomerId] = useState('');
     const [serviceId, setServiceId] = useState('');
+    const [aiderId, setAiderId] = useState(null); // State for the aider_id
 
     const {
         selectedGender = '',
@@ -16,6 +17,7 @@ const PaymentScreen = ({ navigation, route }) => {
         selectedDate = '',
         selectedTime = '',
         location = '',
+        aider_id = null, // Assuming aider_id is passed in route.params
     } = route?.params || {}; // Use optional chaining to prevent undefined errors
 
     // Define payment methods array
@@ -113,14 +115,14 @@ const PaymentScreen = ({ navigation, route }) => {
         if (!serviceId) {
             throw new Error('Service ID is not available.');
         }
-    
+
         try {
             const db = getDatabase();
             const bookingsRef = ref(db, 'tbl_booking');
-    
+
             // Fetch existing bookings to determine the next key
             const snapshot = await get(bookingsRef);
-    
+
             let newKey = 'B1'; // Default key if no bookings exist
             if (snapshot.exists()) {
                 const bookings = snapshot.val();
@@ -129,7 +131,7 @@ const PaymentScreen = ({ navigation, route }) => {
                 const maxKey = Math.max(...numericKeys);
                 newKey = `B${maxKey + 1}`; // Generate the next key
             }
-    
+
             const bookingData = {
                 booking_date: selectedDate,
                 booking_time: selectedTime,
@@ -139,21 +141,20 @@ const PaymentScreen = ({ navigation, route }) => {
                 customer_id: customerId,
                 service_id: serviceId, // Save the service_id instead of service_name
                 payment_method: currentMethod,
+                aider_id: aider_id || null, // Save aider_id (if available)
             };
-    
+
             // Save the booking with the generated key
             const newBookingRef = ref(db, `tbl_booking/${newKey}`);
             await set(newBookingRef, bookingData);
-    
+
             console.log('Booking saved successfully with key:', newKey);
         } catch (error) {
             console.error('Error saving booking:', error);
             throw error;
         }
     };
-    
 
-    // Handle payment confirmation
     // Handle payment confirmation
     const handleConfirmPayment = async () => {
         setIsLoading(true);
@@ -175,8 +176,6 @@ const PaymentScreen = ({ navigation, route }) => {
             setIsLoading(false);
         }
     };
-
-    
 
     // Fallback for when paymentMethods is not available (ensuring we don't call .map on undefined)
     if (!Array.isArray(paymentMethods) || paymentMethods.length === 0) {
@@ -200,7 +199,6 @@ const PaymentScreen = ({ navigation, route }) => {
             ) : (
                 <>
                     <View style={styles.paymentList}>
-                        {/* Check if paymentMethods is defined before using .map() */}
                         {paymentMethods.map((item) => (
                             <TouchableOpacity
                                 key={item.id}
