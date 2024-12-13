@@ -4,8 +4,9 @@ import styles from './styles/dentalCareStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const DentalCareScreen = ({ navigation }) => {
+const DentalCareScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
+    const { address } = route.params || {}; // Retrieve address from route params
 
     // Function to fetch services with service_group_id = 1 from Firebase
     const fetchServices = async () => {
@@ -59,7 +60,7 @@ const DentalCareScreen = ({ navigation }) => {
                 <Text style={styles.question}>
                     What type of dental treatments do you like?
                 </Text>
-
+ 
                 {/* Services Grid */}
                 {services.length === 0 ? (
                     <Text style={styles.noServicesText}>
@@ -74,6 +75,7 @@ const DentalCareScreen = ({ navigation }) => {
                                 onPress={() =>
                                     navigation.navigate("BookingScreen", {
                                         service: service,
+                                        address: address,  // Pass address to BookingScreen
                                     })
                                 }
                             >

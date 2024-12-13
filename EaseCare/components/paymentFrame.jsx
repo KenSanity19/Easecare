@@ -47,7 +47,7 @@ const PaymentScreen = ({ navigation, route }) => {
                 if (snapshot.exists()) {
                     const customers = snapshot.val();
                     const userEntry = Object.entries(customers).find(
-                        ([, customer]) => customer.username === userEmail
+                        ([, customer]) => customer.email === userEmail
                     );
 
                     if (userEntry) {
@@ -110,7 +110,6 @@ const PaymentScreen = ({ navigation, route }) => {
         setCurrentMethod(methodName);
     };
 
-    // Save booking data to the database
     // Save booking data to the database
     const saveBookingToDatabase = async () => {
         if (!serviceId) {

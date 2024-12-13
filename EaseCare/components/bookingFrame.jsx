@@ -59,9 +59,9 @@ const BookingScreen = ({ navigation, route }) => {
         // Search for logged-in user's record by UID or email
         let userRecord = customers[userId]; // If keys match UID directly
         if (!userRecord) {
-          // Search by email/username
+          // Search by email
           for (const key in customers) {
-            if (customers[key].username === user.email) {
+            if (customers[key].email === user.email) {
               userRecord = customers[key];
               break;
             }
@@ -119,7 +119,6 @@ const BookingScreen = ({ navigation, route }) => {
       alert("Failed to fetch user data!");
     }
   };
-  
 
   return (
     <ScrollView style={styles.container}>

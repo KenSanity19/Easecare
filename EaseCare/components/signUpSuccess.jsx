@@ -1,10 +1,11 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import axios from 'axios'; // Import axios
 import styles from './styles/signUpSuccessStyles';
 
-const SuccessScreen = ({ navigation }) => {
+const SuccessScreen = ({ navigation, route }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const { address } = route.params || {}; // Retrieve address from the previous screen, with fallback to an empty object
 
     const handleNavigation = async (screen) => {
         setIsLoading(true); // Show loading spinner
@@ -14,7 +15,7 @@ const SuccessScreen = ({ navigation }) => {
             const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1', { timeout: 5000 });
             if (response.status === 200) {
                 // If the network request is successful, navigate to the next screen
-                navigation.navigate(screen);
+                navigation.navigate(screen, { address }); // Pass the address to the ServicesScreen
             } else {
                 // Handle non-200 HTTP responses
                 Alert.alert('Error', 'Unable to connect to the server. Please try again later.');
@@ -55,7 +56,7 @@ const SuccessScreen = ({ navigation }) => {
                 ) : (
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => handleNavigation('ServicesScreen')} // Change to your desired screen
+                        onPress={() => handleNavigation('ServicesScreen')} // Pass address to ServicesScreen
                     >
                         <Text style={styles.buttonText}>View Services</Text>
                     </TouchableOpacity>

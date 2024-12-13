@@ -13,7 +13,7 @@ const ProfileScreen = ({ navigation }) => {
   });
   const [bookings, setBookings] = useState([]);
   const [isBookingHistorySelected, setIsBookingHistorySelected] = useState(false);
-  const [isBookingStatusSelected, setIsBookingStatusSelected] = useState(true);  // Set default to true
+  const [isBookingStatusSelected, setIsBookingStatusSelected] = useState(true); // Set default to true
 
   useEffect(() => {
     const fetchUserDetailsAndBookings = async () => {
@@ -25,7 +25,9 @@ const ProfileScreen = ({ navigation }) => {
         return;
       }
 
-      const userEmail = user.email;
+      const userEmail = user.email; // Use the email as it is
+      console.log("User Email:", userEmail);  // Log the email
+
       const dbRef = ref(getDatabase());
 
       try {
@@ -37,15 +39,18 @@ const ProfileScreen = ({ navigation }) => {
           let userRecord = null;
           const servicesData = servicesSnapshot.val();
 
+          // Loop through all customers in the tbl_customer
           customerSnapshot.forEach((childSnapshot) => {
             const customerData = childSnapshot.val();
 
-            if (customerData.username === userEmail) {
+            // Compare the email directly without any modification
+            if (customerData.email === userEmail) {
               customerId = childSnapshot.key;
               userRecord = customerData;
             }
           });
 
+          // Check if user data was found and customerId is set
           if (userRecord && customerId) {
             setUserDetails({
               firstName: userRecord.firstName || "",
@@ -54,6 +59,7 @@ const ProfileScreen = ({ navigation }) => {
               disabilityType: userRecord.disabilityType || "Not Specified",
             });
 
+            // Fetch bookings for the user from tbl_booking
             const bookingsSnapshot = await get(child(dbRef, "tbl_booking"));
             if (bookingsSnapshot.exists()) {
               const bookingsData = bookingsSnapshot.val();

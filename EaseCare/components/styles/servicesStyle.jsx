@@ -1,11 +1,13 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
         paddingTop: 200,
+        paddingBottom: 60, // Leave space for the bottom navigation
     },
     topImage: {
         position: 'absolute',
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     bottomNav: {
-        position: 'absolute',  
+        position: 'absolute',  // Keep the bottom nav fixed at the bottom
         bottom: 0,
         left: 0,
         right: 0,
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#ddd',
         backgroundColor: '#f9f9f9',
+        zIndex: 3,  // Ensure it's above the content but below the header
     },
     navItem: {
         alignItems: 'center',
@@ -95,7 +98,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '500',
     },
-    
 });
 
 export default styles;

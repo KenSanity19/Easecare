@@ -4,8 +4,9 @@ import styles from './styles/healthWellnessStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig';
 
-const HealthWellnessScreen = ({ navigation }) => {
+const HealthWellnessScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
+    const { address } = route.params || {}; // Retrieve address from route params
 
     // Fetch health and wellness services from Firebase
     const fetchServices = async () => {
@@ -67,14 +68,17 @@ const HealthWellnessScreen = ({ navigation }) => {
                             key={service.id || index}
                             style={styles.card}
                             onPress={() =>
-                                navigation.navigate("BookingScreen", { service: service })
+                                navigation.navigate("BookingScreen", {
+                                    service: service,
+                                    address: address, // Pass address to BookingScreen
+                                })
                             }
                         >
                             <Text style={styles.cardText}>{service.service_name}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
- 
+
                 {/* Center the last service */}
                 {services[4] && (
                     <View style={{ alignItems: 'center', marginTop: 10 }}>
@@ -82,7 +86,10 @@ const HealthWellnessScreen = ({ navigation }) => {
                             key={services[4].id || 4}
                             style={styles.card}
                             onPress={() =>
-                                navigation.navigate("BookingScreen", { service: services[4] })
+                                navigation.navigate("BookingScreen", {
+                                    service: services[4],
+                                    address: address, // Pass address to BookingScreen
+                                })
                             }
                         >
                             <Text style={styles.cardText}>{services[4].service_name}</Text>

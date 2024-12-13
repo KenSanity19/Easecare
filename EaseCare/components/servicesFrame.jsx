@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, ImageBackground } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles/servicesStyle';
 
-const ServicesScreen = ({ navigation }) => {
+const ServicesScreen = ({ navigation, route }) => {
+    const { address } = route.params || {}; // Retrieve the address from the previous screen
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -21,35 +22,34 @@ const ServicesScreen = ({ navigation }) => {
                 <TextInput
                     style={styles.searchInput}
                     placeholder="Search"/>
-
             </View>
 
             {/* Services Grid */}
             <View style={styles.gridContainer}>
                 <TouchableOpacity
                     style={[styles.card, styles.blueCard]}
-                    onPress={() => navigation.navigate("DentalCareScreen")}>
+                    onPress={() => navigation.navigate("DentalCareScreen", { address })}>
                     <Image source={require("../assets/images/dentalCare.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Dental Care</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.card, styles.blueCard]}
-                    onPress={() => navigation.navigate("BeautyParlourScreen")}>
+                    onPress={() => navigation.navigate("BeautyParlourScreen", { address })}>
                     <Image source={require("../assets/images/beautyParlour.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Beauty Parlour</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.card, styles.orangeCard]}
-                    onPress={() => navigation.navigate("NailTreatmentScreen")}>
+                    onPress={() => navigation.navigate("NailTreatmentScreen", { address })}>
                     <Image source={require("../assets/images/nailTreatment.jpg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Nail Treatment</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.card, styles.orangeCard]}
-                    onPress={() => navigation.navigate("HealthWellnessScreen")}>
+                    onPress={() => navigation.navigate("HealthWellnessScreen", { address })}>
                     <Image source={require("../assets/images/healthWellness.jpeg")} style={styles.cardImage} />
                     <Text style={styles.cardText}>Health and Wellness</Text>
                 </TouchableOpacity>

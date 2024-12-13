@@ -20,7 +20,7 @@ const SignUp = ({ navigation }) => {
     const [disabilityDuration, setDisabilityDuration] = useState('');
     const [contact, setContact] = useState('');
     const [address, setAddress] = useState('');
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [pwdIdFile, setPwdIdFile] = useState(null);
 
@@ -76,8 +76,8 @@ const SignUp = ({ navigation }) => {
             Alert.alert('Error', 'Address is required.');
             return;
         }
-        if (!username) {
-            Alert.alert('Error', 'Username is required.');
+        if (!email) {
+            Alert.alert('Error', 'Email is required.');
             return;
         }
         if (!password) {
@@ -86,7 +86,7 @@ const SignUp = ({ navigation }) => {
         }
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
             const db = getDatabase();
             const customersRef = ref(db, 'tbl_customer');
@@ -110,12 +110,12 @@ const SignUp = ({ navigation }) => {
                 disabilityDuration,
                 contact,
                 address,
-                username,
+                email,
                 pwdIdFile: pwdIdFile?.name || null,
             });
     
             Alert.alert('Success', 'Registration successful!');
-            navigation.navigate('SuccessScreen');
+            navigation.navigate('SuccessScreen', { address });
         } catch (error) {
             console.error('Registration Error:', error);
     
@@ -141,7 +141,6 @@ const SignUp = ({ navigation }) => {
             Alert.alert('Error', errorMessage);
         }
     };
-    
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -251,10 +250,10 @@ const SignUp = ({ navigation }) => {
 
                 <Text style={styles.accountDetailsHeader}>Account Details:</Text>
                 <TextInput
-                    label="Username"
+                    label="Email"
                     mode="outlined"
-                    value={username}
-                    onChangeText={setUsername}
+                    value={email}
+                    onChangeText={setEmail}
                     style={styles.input}
                     left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}/>
                 <TextInput

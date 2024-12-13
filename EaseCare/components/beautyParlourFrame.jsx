@@ -4,8 +4,9 @@ import styles from './styles/beautyParlourStyle';
 import { ref, get } from 'firebase/database';
 import { database } from '../app/firebaseConfig'; 
 
-const BeautyParlourScreen = ({ navigation }) => {
+const BeautyParlourScreen = ({ navigation, route }) => {
     const [services, setServices] = useState([]);
+    const { address } = route.params || {}; // Retrieve address from route params
 
     // Function to fetch services with service_group_id = 2 from Firebase
     const fetchServices = async () => {
@@ -71,7 +72,8 @@ const BeautyParlourScreen = ({ navigation }) => {
                                 style={styles.card}
                                 onPress={() =>
                                     navigation.navigate("BookingScreen", {
-                                        service: service
+                                        service: service,
+                                        address: address,  // Pass address to BookingScreen
                                     })
                                 }
                             >
