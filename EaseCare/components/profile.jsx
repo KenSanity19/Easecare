@@ -65,6 +65,7 @@ const ProfileScreen = ({ navigation }) => {
                       booking_id: bookingId,
                       service_name: service ? service.service_name : "Unknown Service",
                       price: service ? service.price : "Price not available",
+                      aider_id: booking.aider_id || null, // Include aider_id
                     };
                   }
                   return null;
@@ -130,7 +131,22 @@ const ProfileScreen = ({ navigation }) => {
               `Service: ${item.service_name}\nDate & Time: ${formatDateTime(
                 item.booking_date,
                 item.booking_time
-              )}\nPrice: ${item.price}`
+              )}\nPrice: ${item.price}`,
+              [
+                {
+                  text: "Success",
+                  onPress: () =>
+                    navigation.navigate("BookingSuccessScreen", {
+                      bookingId: item.booking_id,
+                      aiderId: item.aider_id, // Pass aider_id
+                      customerId: item.customer_id, // Pass customer_id
+                    }),
+                },
+                {
+                  text: "Close",
+                  style: "cancel",
+                },
+              ]
             )
           }
         >
@@ -173,12 +189,12 @@ const ProfileScreen = ({ navigation }) => {
         )}
       </View>
     );
-  };
+  };  
 
   const { firstName, middleName, lastName, disabilityType } = userDetails;
 
   const filteredBookings = isBookingHistorySelected
-    ? bookings.filter((item) => item.status === "Successed" || item.status === "Canceled")
+    ? bookings.filter((item) => item.status === "Success" || item.status === "Canceled")
     : bookings.filter((item) => item.status !== "Canceled");
 
   return (

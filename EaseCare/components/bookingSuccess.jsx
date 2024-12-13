@@ -1,39 +1,49 @@
 import React from 'react';
 import { View, ImageBackground, Image } from 'react-native';
 import { Text, Button } from 'react-native-paper';
-import styles from './styles/signUpSuccessStyles';
+import styles from './styles/bookingSuccessStyle';
 
-const BookingSuccesscreen = ({ navigation }) => {
+const BookingSuccessScreen = ({ route, navigation }) => {
+    // Extract aider_id and customer_id from route params
+    const { aider_id, customer_id } = route.params;  
+
     return (
         <View style={styles.container}>
             <ImageBackground
                 source={require('../assets/images/topImage.png')}
                 style={styles.topImage}
-                resizeMode="cover"/>
+                resizeMode="cover"
+            />
 
             <Image
                 source={require('../assets/images/Check.png')}
-                style={styles.checkImage}/>
+                style={styles.checkImage}
+            />
 
             <Text style={styles.successText}>Booking Success!</Text>
             <Text style={styles.subtitle}>
-           Give feedback to the aider to improve 
-           our services.
-          </Text>
+                Give feedback to the aider to improve our services.
+            </Text>
             
+            {/* Navigate to AiderFeedbackScreen and pass aider_id and customer_id */}
             <Button
                 mode="contained"
-                onPress={() => navigation.navigate('AiderFeedbackScreen')}
+                onPress={() => 
+                    navigation.navigate("AiderFeedbackScreen", { aider_id, customer_id })
+                }
                 style={styles.button}
-                labelStyle={styles.buttonText}>FEEDBACK
+                labelStyle={styles.buttonText}
+            >
+                FEEDBACK
             </Button>
 
             <ImageBackground
                 source={require('../assets/images/bottomImage.png')}
                 style={styles.bottomImage}
-                resizeMode="cover"/>
+                resizeMode="cover"
+            />
         </View>
     );
 };
 
-export default BookingSuccesscreen;
+export default BookingSuccessScreen;

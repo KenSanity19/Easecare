@@ -26,7 +26,7 @@ import PassSuccessScreen from '../components/changepassSucc';
 import AccountDetailsScreen from '../components/accountdetails';
 import FeedbackScreen from '../components/appFeedback';
 import FeedbackSuccessScreen from '../components/FeedbackSuccess';
-import BookingSuccesscreen from '../components/bookingSuccess';
+import BookingSuccessScreen from '../components/bookingSuccess';
 import AiderFeedbackScreen from '../components/aiderFeedback';
 
 const Stack = createStackNavigator();
@@ -70,7 +70,7 @@ export default function App() {
                     <Stack.Screen name="AccountDetailsScreen" component={AccountDetailsScreen} options={{ title: 'Account Details' }} />
                     <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} options={{ title: 'Feedback' }} />
                     <Stack.Screen name="FeedbackSuccessScreen" component={FeedbackSuccessScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="BookingSuccesscreen" component={BookingSuccesscreen} options={{ title: 'Feedback' }} />
+                    <Stack.Screen name="BookingSuccessScreen" component={BookingSuccessScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="AiderFeedbackScreen" component={AiderFeedbackScreen} options={{ title: 'Feedback' }} />
                 </Stack.Navigator>
         </PaperProvider>
