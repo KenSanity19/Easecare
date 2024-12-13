@@ -69,5 +69,23 @@ const styles = StyleSheet.create({
         width: 400,
         zIndex: 1, // Ensure it's behind the content
     },
+    passwordInputContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      marginBottom: 15,
+      zIndex: 3,
+    },
+    passwordInput: {
+      flex: 1,
+      height: 40,
+    },
+    iconContainer: {
+      padding: 5,
+    },
+    
   });
   export default styles;

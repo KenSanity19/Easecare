@@ -4,7 +4,6 @@ import { Text, TextInput, Button, Checkbox } from 'react-native-paper';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../app/firebaseConfig';
-import * as Facebook from 'expo-facebook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles/loginStyle';
 import HoverableButton from './hoverableButton';
@@ -14,6 +13,7 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     // Load saved credentials on component mount
     useEffect(() => {
@@ -85,34 +85,14 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
-    const handleFacebookLogin = async () => {
-        setIsLoading(true);
-        try {
-            await Facebook.initializeAsync({
-                appId: '935984145151270',
-            });
-
-            const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-                permissions: ['public_profile', 'email'],
-            });
-
-            if (type === 'success') {
-                console.log('Facebook login successful, token:', token);
-                Alert.alert('Success', 'Facebook login successful');
-                navigation.navigate('ServicesScreen');
-            } else {
-                Alert.alert('Login Failed', 'Facebook login was cancelled.');
-            }
-        } catch (error) {
-            console.error('Facebook Login Error:', error);
-            Alert.alert('Login Failed', 'There was an issue with Facebook login.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleBiometricsLogin = () => {
         console.log('Biometric login initiated');
+    };
+
+    // This is now a no-op function for the Facebook button
+    const handleFacebookLogin = () => {
+        console.log('Facebook login is disabled');
+        Alert.alert('Facebook Login', 'Facebook login is currently disabled.');
     };
 
     return (
@@ -127,7 +107,7 @@ const LoginScreen = ({ navigation }) => {
             ) : (
                 <>
                     <TextInput
-                        label="Email / Username"
+                        label="Email"
                         mode="outlined"
                         value={email}
                         onChangeText={setEmail}
@@ -142,9 +122,21 @@ const LoginScreen = ({ navigation }) => {
                         mode="outlined"
                         value={password}
                         onChangeText={setPassword}
-                        secureTextEntry
+                        secureTextEntry={!isPasswordVisible}
                         style={styles.input}
                         left={<TextInput.Icon icon={() => <Ionicons name="lock-closed" size={20} color="#6e6e6e" />} />}
+                        right={
+                            <TextInput.Icon
+                                icon={() => (
+                                    <Ionicons
+                                        name={isPasswordVisible ? 'eye' : 'eye-off'}
+                                        size={20}
+                                        color="#6e6e6e"
+                                    />
+                                )}
+                                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                            />
+                        }
                     />
 
                     <View style={styles.rememberMeForgotPasswordContainer}>
@@ -165,7 +157,6 @@ const LoginScreen = ({ navigation }) => {
                             Forgot Password?
                         </Button>
                     </View>
-
 
                     <HoverableButton
                         mode="contained"
@@ -200,10 +191,10 @@ const LoginScreen = ({ navigation }) => {
                     <Button
                         mode="text"
                         style={styles.registerButton}
-                        labelStyle={{ color: 'black' }}
+                        labelStyle={{ color: 'black', fontSize: 16 }}
                         onPress={() => navigation.navigate('SignUp')}
                     >
-                        Don't have an account? <Text style={styles.signUpText}>Sign Up</Text>
+                        New to EaseCare? <Text style={styles.signUpText}>Sign Up</Text>
                     </Button>
                 </>
             )}

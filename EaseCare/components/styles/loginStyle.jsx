@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        marginTop: 10,
+        marginBottom: 25,
+        marginTop: -20,
         paddingHorizontal: 5,
     },
     
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     biometricLabel: {
-        fontSize: 14,
+        fontSize: 17,
         color: '#D97706',
         fontWeight: 'bold',
     },
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     signUpText: {
-        fontSize: 17,
+        fontSize: 20,
         color: '#D97706',
         fontWeight: 'bold', 
     },
