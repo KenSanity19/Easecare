@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import { View, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Text, TextInput, Button, Menu } from 'react-native-paper';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
@@ -27,6 +27,8 @@ const SignUp = ({ navigation }) => {
     const [sexMenuVisible, setSexMenuVisible] = useState(false);
     const [disabilityTypeMenuVisible, setDisabilityTypeMenuVisible] = useState(false);
     const [disabilityDurationMenuVisible, setDisabilityDurationMenuVisible] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleFilePicker = async () => {
         try {
@@ -44,62 +46,33 @@ const SignUp = ({ navigation }) => {
 
     const handleRegister = async () => {
         // Validate required fields
-        if (!firstName) {
-            Alert.alert('Error', 'First Name is required.');
-            return;
-        }
-        if (!lastName) {
-            Alert.alert('Error', 'Last Name is required.');
-            return;
-        }
-        if (!age) {
-            Alert.alert('Error', 'Age is required.');
-            return;
-        }
-        if (!sex) {
-            Alert.alert('Error', 'Please select your sex.');
-            return;
-        }
-        if (!disabilityType) {
-            Alert.alert('Error', 'Please select a type of disability.');
-            return;
-        }
-        if (!disabilityDuration) {
-            Alert.alert('Error', 'Please specify the duration of your disability.');
-            return;
-        }
-        if (!contact) {
-            Alert.alert('Error', 'Contact number is required.');
-            return;
-        }
-        if (!address) {
-            Alert.alert('Error', 'Address is required.');
-            return;
-        }
-        if (!email) {
-            Alert.alert('Error', 'Email is required.');
-            return;
-        }
-        if (!password) {
-            Alert.alert('Error', 'Password is required.');
+        if (!firstName || !lastName || !age || !sex || !disabilityType || !disabilityDuration || !contact || !address || !email || !password) {
+            Alert.alert('Error', 'All fields are required. Please fill out the form completely.');
             return;
         }
 
+        if (contact.length !== 10 || contact[0] !== '9') {
+            Alert.alert('Error', 'Contact number must be 10 digits and start with 9 (e.g., +639XXXXXXXX).');
+            return;
+        }
+
+        setLoading(true); // Start loading
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
+
             const db = getDatabase();
             const customersRef = ref(db, 'tbl_customer');
             const snapshot = await get(customersRef);
-    
-            let newUserId = 'C1'; 
+
+            let newUserId = 'C1';
             if (snapshot.exists()) {
                 const userIds = Object.keys(snapshot.val());
                 const numericIds = userIds.map((id) => parseInt(id.replace('C', ''), 10)).filter((num) => !isNaN(num));
                 const highestId = Math.max(...numericIds);
-                newUserId = `C${highestId + 1}`; 
+                newUserId = `C${highestId + 1}`;
             }
-    
+
             await set(ref(db, `tbl_customer/${newUserId}`), {
                 firstName,
                 middleName,
@@ -113,12 +86,12 @@ const SignUp = ({ navigation }) => {
                 email,
                 pwdIdFile: pwdIdFile?.name || null,
             });
-    
+
             Alert.alert('Success', 'Registration successful!');
             navigation.navigate('SuccessScreen', { address });
         } catch (error) {
             console.error('Registration Error:', error);
-    
+
             let errorMessage = '';
             switch (error.code) {
                 case 'auth/email-already-in-use':
@@ -137,8 +110,10 @@ const SignUp = ({ navigation }) => {
                     errorMessage = error.message || 'An error occurred during registration.';
                     break;
             }
-    
+
             Alert.alert('Error', errorMessage);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -210,6 +185,7 @@ const SignUp = ({ navigation }) => {
                             right={<TextInput.Icon icon="menu-down" size={50} onPress={() => setDisabilityTypeMenuVisible(true)} />}/>}>
                     <Menu.Item onPress={() => { setDisabilityType('Visual Impairment'); setDisabilityTypeMenuVisible(false); }} title="Visual Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Hearing Impairment'); setDisabilityTypeMenuVisible(false); }} title="Hearing Impairment" />
+                    <Menu.Item onPress={() => { setDisabilityType('Speech Impairment'); setDisabilityTypeMenuVisible(false); }} title="Speech Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Mobility Impairment'); setDisabilityTypeMenuVisible(false); }} title="Mobility Impairment" />
                     <Menu.Item onPress={() => { setDisabilityType('Cognitive Impairment'); setDisabilityTypeMenuVisible(false); }} title="Cognitive Impairment" />
                 </Menu>
@@ -219,7 +195,7 @@ const SignUp = ({ navigation }) => {
                     onDismiss={() => setDisabilityDurationMenuVisible(false)}
                     anchor={
                         <TextInput
-                            label="How long have you been disabled"
+                            label="Disabled for how long?"
                             mode="outlined"
                             editable={false}
                             value={disabilityDuration}
@@ -236,10 +212,22 @@ const SignUp = ({ navigation }) => {
                     label="Contact Number"
                     mode="outlined"
                     value={contact}
-                    onChangeText={setContact}
+                    onChangeText={(text) => {
+                        const sanitized = text.replace(/\D/g, '').slice(0, 10);
+
+                        if (sanitized.length > 0 && sanitized[0] !== '9') {
+                            Alert.alert('Error', 'The number must start with 9 after the +63 country code.');
+                        }
+
+                        setContact(sanitized);
+                    }}
                     keyboardType="phone-pad"
                     style={styles.input}
-                    left={<TextInput.Icon icon={() => <Ionicons name="call" size={20} color="#6e6e6e" />} />}/>
+                    left={
+                        <TextInput.Icon 
+                            icon={() => (
+                                <Text style={{ color: '#6e6e6e', marginLeft: 10 }}>+63</Text>)}/>} />
+
                 <TextInput
                     label="Address"
                     mode="outlined"
@@ -256,14 +244,30 @@ const SignUp = ({ navigation }) => {
                     onChangeText={setEmail}
                     style={styles.input}
                     left={<TextInput.Icon icon={() => <MaterialIcons name="person" size={20} color="#6e6e6e" />} />}/>
-                <TextInput
-                    label="Password"
-                    mode="outlined"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                    style={styles.input}
-                    left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}/>
+
+                <View style={styles.passwordField}>
+                    <TextInput
+                        label="Password"
+                        mode="outlined"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={!passwordVisible} 
+                        style={styles.input}
+                        left={<TextInput.Icon icon={() => <MaterialIcons name="lock" size={20} color="#6e6e6e" />} />}
+                        right={
+                            <TextInput.Icon
+                                icon={() => (
+                                    <Ionicons
+                                        name={passwordVisible ? 'eye-off' : 'eye'}
+                                        size={20}
+                                        color="#6e6e6e"
+                                    />
+                                )}
+                                onPress={() => setPasswordVisible(!passwordVisible)}
+                            />
+                        }
+                    />
+                </View>
 
                 <Text style={styles.fileUploadText}>Upload your PWD ID here:</Text>
                 <Button mode="outlined" onPress={handleFilePicker} style={styles.fileButton}>Choose File</Button>
@@ -273,7 +277,9 @@ const SignUp = ({ navigation }) => {
                     mode="contained"
                     style={styles.registerButton}
                     labelStyle={styles.registerButtonText}
-                    onPress={handleRegister}>Register
+                    onPress={handleRegister}
+                    disabled={loading}>
+                    {loading ? <ActivityIndicator color="#fff" size="small" /> : 'Register'}
                 </HoverableButton>
 
                 <Button

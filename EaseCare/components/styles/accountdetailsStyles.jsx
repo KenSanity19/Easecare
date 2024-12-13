@@ -5,18 +5,18 @@ const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "transparent", // Ensure background is transparent to show the image
+    backgroundColor: "transparent", 
   },
   scrollView: {
     flex: 1,
-    zIndex: 2, // Ensures the content is above the background image
+    zIndex: 2, 
   },
   header: {
     padding: 16,
     backgroundColor: "#f5f5f5",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    zIndex: 3, // Ensures it's above the image
+    zIndex: 3, 
   },
   headerTitle: {
     fontSize: 18,
@@ -57,27 +57,28 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: "#f9f9f9",
   },
-  button: {
-    marginTop: 16,
-    backgroundColor: "#007bff",
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    zIndex: 3,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   topImage: {
     position: "absolute",
     top: 0,
     left: 0,
     width: width,
     height: height,
-    zIndex: 1, // Ensures it's in the background
+    zIndex: 1, 
   },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    backgroundColor: "#007BFF", 
+  },
+  buttonText: {
+    color: "#fff", 
+    fontSize: 16,
+    fontWeight: "bold",
+  },  
+  
 });
 
 export default styles;
