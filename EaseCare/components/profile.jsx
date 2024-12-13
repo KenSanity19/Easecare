@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, Alert, FlatList } from "react-native";
-import { getDatabase, ref, get, child } from "firebase/database";
+import { getDatabase, ref, get, child, update } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import styles from "./styles/profileStyles";
 
@@ -13,7 +13,7 @@ const ProfileScreen = ({ navigation }) => {
   });
   const [bookings, setBookings] = useState([]);
   const [isBookingHistorySelected, setIsBookingHistorySelected] = useState(false);
-  const [isBookingStatusSelected, setIsBookingStatusSelected] = useState(true); // Set default to true
+  const [isBookingStatusSelected, setIsBookingStatusSelected] = useState(true);
 
   useEffect(() => {
     const fetchUserDetailsAndBookings = async () => {
@@ -25,9 +25,7 @@ const ProfileScreen = ({ navigation }) => {
         return;
       }
 
-      const userEmail = user.email; // Use the email as it is
-      console.log("User Email:", userEmail);  // Log the email
-
+      const userEmail = user.email;
       const dbRef = ref(getDatabase());
 
       try {
@@ -39,18 +37,14 @@ const ProfileScreen = ({ navigation }) => {
           let userRecord = null;
           const servicesData = servicesSnapshot.val();
 
-          // Loop through all customers in the tbl_customer
           customerSnapshot.forEach((childSnapshot) => {
             const customerData = childSnapshot.val();
-
-            // Compare the email directly without any modification
             if (customerData.email === userEmail) {
               customerId = childSnapshot.key;
               userRecord = customerData;
             }
           });
 
-          // Check if user data was found and customerId is set
           if (userRecord && customerId) {
             setUserDetails({
               firstName: userRecord.firstName || "",
@@ -59,22 +53,23 @@ const ProfileScreen = ({ navigation }) => {
               disabilityType: userRecord.disabilityType || "Not Specified",
             });
 
-            // Fetch bookings for the user from tbl_booking
             const bookingsSnapshot = await get(child(dbRef, "tbl_booking"));
             if (bookingsSnapshot.exists()) {
               const bookingsData = bookingsSnapshot.val();
-              const userBookings = Object.values(bookingsData).filter(
-                (booking) => booking.customer_id === customerId
-              );
-
-              const bookingsWithServiceDetails = userBookings.map((booking) => {
-                const service = servicesData[booking.service_id];
-                return {
-                  ...booking,
-                  service_name: service ? service.service_name : "Unknown Service",
-                  price: service ? service.price : "Price not available",
-                };
-              });
+              const bookingsWithServiceDetails = Object.entries(bookingsData)
+                .map(([bookingId, booking]) => {
+                  if (booking.customer_id === customerId) {
+                    const service = servicesData[booking.service_id];
+                    return {
+                      ...booking,
+                      booking_id: bookingId,
+                      service_name: service ? service.service_name : "Unknown Service",
+                      price: service ? service.price : "Price not available",
+                    };
+                  }
+                  return null;
+                })
+                .filter((booking) => booking !== null);
 
               setBookings(bookingsWithServiceDetails);
             } else {
@@ -95,6 +90,23 @@ const ProfileScreen = ({ navigation }) => {
     fetchUserDetailsAndBookings();
   }, []);
 
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      const db = getDatabase();
+      await update(ref(db, `tbl_booking/${bookingId}`), { status: "Canceled" });
+      Alert.alert("Success", "Booking has been canceled!");
+
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking.booking_id === bookingId ? { ...booking, status: "Canceled" } : booking
+        )
+      );
+    } catch (error) {
+      console.error("Error canceling booking:", error);
+      Alert.alert("Error", "Failed to cancel booking!");
+    }
+  };
+
   const renderBookingItem = ({ item }) => {
     const formatDateTime = (dateString, timeString) => {
       const date = new Date(dateString);
@@ -105,42 +117,20 @@ const ProfileScreen = ({ navigation }) => {
       }).format(date);
       return `${formattedDate} at ${timeString}`;
     };
-
-    const handleCancelBooking = async (bookingId) => {
-      const dbRef = ref(getDatabase());
-      try {
-        // Update the booking status to "Canceled"
-        await get(child(dbRef, `tbl_booking/${bookingId}`)).then(async (snapshot) => {
-          if (snapshot.exists()) {
-            await getDatabase().ref(`tbl_booking/${bookingId}`).update({ status: "Canceled" });
-            Alert.alert("Success", "Booking has been canceled!");
-
-            // Optionally, update local state to reflect changes
-            setBookings((prevBookings) =>
-              prevBookings.map((booking) =>
-                booking.booking_id === bookingId ? { ...booking, status: "Canceled" } : booking
-              )
-            );
-          } else {
-            Alert.alert("Error", "Booking not found!");
-          }
-        });
-      } catch (error) {
-        console.error("Error canceling booking:", error);
-        Alert.alert("Error", "Failed to cancel booking!");
-      }
-    };
-
+  
     return (
       <View style={styles.cardContainer}>
         <Text style={styles.cardDate}>{formatDateTime(item.booking_date, item.booking_time)}</Text>
-
+  
         <TouchableOpacity
           style={styles.bookingCard}
           onPress={() =>
             Alert.alert(
               "Booking Details",
-              `Service: ${item.service_name}\nDate & Time: ${formatDateTime(item.booking_date, item.booking_time)}\nPrice: ${item.price}`
+              `Service: ${item.service_name}\nDate & Time: ${formatDateTime(
+                item.booking_date,
+                item.booking_time
+              )}\nPrice: ${item.price}`
             )
           }
         >
@@ -149,16 +139,27 @@ const ProfileScreen = ({ navigation }) => {
               <Text style={styles.serviceName}>{item.service_name}</Text>
               <Text style={styles.servicePrice}>{`${item.price}`}</Text>
             </View>
+            {isBookingHistorySelected && (
+              <View
+                style={[
+                  styles.statusLabel,
+                  item.status === "Canceled" ? styles.canceled : styles.success,
+                ]}
+              >
+                <Text style={styles.statusText}>{item.status}</Text>
+              </View>
+            )}
           </View>
         </TouchableOpacity>
-
-        {item.status !== "Canceled" && (
+  
+        {item.status !== "Canceled" && isBookingStatusSelected && (
           <TouchableOpacity
+            style={styles.cancelButton}
             onPress={() =>
               Alert.alert("Cancel Booking", "Do you want to cancel this booking?", [
                 {
                   text: "Yes",
-                  onPress: () => handleCancelBooking(item.booking_id), // Pass the booking ID here
+                  onPress: () => handleCancelBooking(item.booking_id),
                 },
                 {
                   text: "No",
@@ -175,6 +176,10 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const { firstName, middleName, lastName, disabilityType } = userDetails;
+
+  const filteredBookings = isBookingHistorySelected
+    ? bookings.filter((item) => item.status === "Successed" || item.status === "Canceled")
+    : bookings.filter((item) => item.status !== "Canceled");
 
   return (
     <View style={styles.container}>
@@ -205,7 +210,7 @@ const ProfileScreen = ({ navigation }) => {
           }}
         >
           <Text
-            style={[styles.bookingText, { color: "black" }, isBookingStatusSelected && { color: "#007bff", fontWeight: "bold" }]}
+            style={[styles.bookingText, isBookingStatusSelected && { color: "#007bff", fontWeight: "bold" }]}
           >
             Booking Status
           </Text>
@@ -218,7 +223,7 @@ const ProfileScreen = ({ navigation }) => {
           }}
         >
           <Text
-            style={[styles.bookingText, { color: "black" }, isBookingHistorySelected && { color: "#007bff", fontWeight: "bold" }]}
+            style={[styles.bookingText, isBookingHistorySelected && { color: "#007bff", fontWeight: "bold" }]}
           >
             Booking History
           </Text>
@@ -227,15 +232,13 @@ const ProfileScreen = ({ navigation }) => {
 
       <View style={styles.separator}></View>
 
-      {isBookingStatusSelected && (
-        <View style={styles.bookingStatus}>
-          <FlatList
-            data={bookings}
-            renderItem={renderBookingItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      )}
+      <View style={styles.bookingStatus}>
+        <FlatList
+          data={filteredBookings}
+          renderItem={renderBookingItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
 
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("HomePage")}>

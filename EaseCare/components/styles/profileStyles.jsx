@@ -86,11 +86,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#333",
   },
+  cancelButton: {
+    alignSelf: "flex-end",
+    marginTop: 8,
+    marginRight: 16,
+  },
   cancelText: {
     fontSize: 14,
     color: "red",
     fontWeight: "bold",
   },
+  
   bottomNav: {
     position: 'absolute',
     bottom: 0,
@@ -124,9 +130,8 @@ const styles = StyleSheet.create({
     marginBottom: 10, 
   },
   bookingText: {
-    color: '#007bff', 
+    color: 'black', 
     fontSize: 16,
-    fontWeight: 'bold',
     marginHorizontal: 30, 
     marginTop: 30,
   },
@@ -168,6 +173,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  
+  statusLabel: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    alignSelf: "flex-end", 
+  },
+  
+  canceled: {
+    borderColor: "#f5c6cb",
+  }, 
+  success: {
+    backgroundColor: "#d4edda",
+    borderColor: "#c3e6cb",
+  },
+  statusText: {
+    fontSize: 18,
+    color: "red", 
+    fontWeight: "bold",
+    bottom: 10,
   },
   cardDetails: {
     flex: 1,
