@@ -87,7 +87,6 @@ const SignUp = ({ navigation }) => {
                 pwdIdFile: pwdIdFile?.name || null,
             });
 
-            Alert.alert('Success', 'Registration successful!');
             navigation.navigate('SuccessScreen', { address });
         } catch (error) {
             console.error('Registration Error:', error);
@@ -258,7 +257,7 @@ const SignUp = ({ navigation }) => {
                             <TextInput.Icon
                                 icon={() => (
                                     <Ionicons
-                                        name={passwordVisible ? 'eye-off' : 'eye'}
+                                        name={passwordVisible ? 'eye' : 'eye-off'}
                                         size={20}
                                         color="#6e6e6e"
                                     />

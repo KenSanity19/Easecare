@@ -55,7 +55,6 @@ const LoginScreen = ({ navigation }) => {
                 await AsyncStorage.removeItem('savedPassword');
             }
 
-            Alert.alert('Success', `Welcome back, ${user.email}!`);
             navigation.navigate('ServicesScreen');
         } catch (error) {
             console.error(error);
