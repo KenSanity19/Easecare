@@ -28,10 +28,9 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
     customer_id: "",
   });
 
-  // Fetch aider_id and customer_id from route params
+  // Fetch aider_id from route params
   const { aider_id } = route.params;
 
-  // Fetch user details and customer_id based on the email or UID
   useEffect(() => {
     const fetchUserDetails = async () => {
       const auth = getAuth();
@@ -93,6 +92,12 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
       return;
     }
 
+    // Check if aider_id is available
+    if (!aider_id) {
+      Alert.alert("Error", "Aider ID is missing.");
+      return;
+    }
+
     try {
       const db = getDatabase();
       const feedbackRef = ref(db, "tbl_aider_feedback");
@@ -119,11 +124,13 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
         date: new Date().toISOString().split("T")[0],
         time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         customer_id: userDetails.customer_id,  // Include customer_id here
+        aider_id: aider_id,  // Include aider_id here
       };
 
       // Save feedback under the new ID
       await set(ref(db, `tbl_aider_feedback/${newFeedbackId}`), newFeedback);
 
+      // Navigate to the success screen after submission
       navigation.navigate("FeedbackSuccessScreen");
     } catch (error) {
       console.error("Error submitting feedback: ", error);
@@ -155,6 +162,7 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
+
         <Text style={styles.label}>Rate your service experience.</Text>
         <View style={styles.ratingContainer}>
           {Array.from({ length: 5 }, (_, index) => (
@@ -170,6 +178,7 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
+
         <TextInput
           style={styles.input}
           placeholder="Leave a comment"
@@ -182,6 +191,7 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
           <Text style={styles.buttonText}>SUBMIT FEEDBACK</Text>
         </TouchableOpacity>
       </View>
+
       <ImageBackground
         source={require("../assets/images/topImage.png")}
         style={styles.bottomImage}

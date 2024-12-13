@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     specialization: {
         fontSize: 16,
-        textAlign: "center",  // Center the specialization
+        textAlign: "center",  
         color: "#666",
         marginVertical: 5,
     },
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 20,
-        width: "80%", // Center-align button and limit its width
+        width: "80%", 
     },
     buttonText: {
         color: "#fff",
@@ -46,10 +46,60 @@ const styles = StyleSheet.create({
     },
     noAiderText: {
         fontSize: 16,
-        color: "#FF0000", // Red color to indicate no results
-        textAlign: "center",  // Center the text
+        color: "#FF0000", 
+        textAlign: "center",  
         marginTop: 20,
-    }
+    },
+    aiderProfile: {
+        height: 80,
+        width: 80,
+    },
+
+    // Feedback card styles
+    feedbackCardContainer: {
+        marginTop: 15,
+        backgroundColor: "#ffa500",
+        padding: 15,
+        borderRadius: 8,
+        width: 340,
+        alignSelf: "center",
+    },
+    feedbackTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#333",
+        marginRight: 230,
+        marginTop: 20,
+        
+    },
+    feedbackCard: {
+        backgroundColor: "#fff",
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+    feedbackText: {
+        fontSize: 14,
+        color: "#666",
+        marginBottom: 5,
+    },
+    noFeedbackText: {
+        fontSize: 16,
+        color: "#FF0000", 
+        textAlign: "center",  
+        marginTop: 10,
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'black', 
+        width: 350,               
+        alignSelf: 'center',      
+        marginVertical: 10,       
+    },
 });
 
 export default styles;

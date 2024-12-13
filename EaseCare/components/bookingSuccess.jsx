@@ -4,8 +4,7 @@ import { Text, Button } from 'react-native-paper';
 import styles from './styles/bookingSuccessStyle';
 
 const BookingSuccessScreen = ({ route, navigation }) => {
-    // Extract aider_id and customer_id from route params
-    const { aider_id, customer_id } = route.params;  
+    const { aider_id, customer_id } = route.params;  // Extract customer_id along with aider_id
 
     return (
         <View style={styles.container}>
@@ -25,7 +24,6 @@ const BookingSuccessScreen = ({ route, navigation }) => {
                 Give feedback to the aider to improve our services.
             </Text>
             
-            {/* Navigate to AiderFeedbackScreen and pass aider_id and customer_id */}
             <Button
                 mode="contained"
                 onPress={() => 

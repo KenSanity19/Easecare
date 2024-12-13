@@ -186,14 +186,23 @@ const styles = StyleSheet.create({
     borderColor: "#f5c6cb",
   }, 
   success: {
-    backgroundColor: "#d4edda",
     borderColor: "#c3e6cb",
+    color: '#008000',
+  },
+  statusLabel: {
+    padding: 5,
+    borderRadius: 5,
+    alignSelf: "flex-start",
+  },
+  canceled: {
+    backgroundColor: "red",
+  },
+  success: {
+    backgroundColor: "green",
   },
   statusText: {
-    fontSize: 18,
-    color: "red", 
-    fontWeight: "bold",
-    bottom: 10,
+    color: "#fff", 
+    fontSize: 16,
   },
   cardDetails: {
     flex: 1,
@@ -220,6 +229,11 @@ const styles = StyleSheet.create({
     bottom: 60,
     right: 15,
   },
+  userProfile: {
+    height: 150,
+    width: 150,
+    marginBottom: -20,
+  }
   
 });
 
