@@ -96,6 +96,7 @@ const ProfileScreen = ({ navigation }) => {
   const handleCancelBooking = async (bookingId) => {
     try {
       const db = getDatabase();
+      db.persistenceEnabled = true;
       await update(ref(db, `tbl_booking/${bookingId}`), { status: "Canceled" });
       Alert.alert("Success", "Booking has been canceled!");
 

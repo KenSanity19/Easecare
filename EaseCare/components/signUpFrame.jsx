@@ -62,6 +62,7 @@ const SignUp = ({ navigation }) => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
             const db = getDatabase();
+            db.persistenceEnabled = true;
             const customersRef = ref(db, 'tbl_customer');
             const snapshot = await get(customersRef);
 

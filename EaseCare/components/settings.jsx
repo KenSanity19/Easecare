@@ -68,20 +68,6 @@ const SettingsScreen = ({ navigation }) => {
         </View>
       </TouchableOpacity>
 
-      {/* Feedback Button Below Logout */}
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() => navigation.navigate("BookingSuccesscreen")}
-      >
-        <MaterialIcons name="feedback" size={24} color="#ffc107" />
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>Aider Feedback</Text>
-          <Text style={styles.subtitle}>
-            Send feedback about your experience with an aider.
-          </Text>
-        </View>
-      </TouchableOpacity>
-
       {/* Decorative Bottom Image */}
       <ImageBackground
         source={require("../assets/images/topImage.png")}

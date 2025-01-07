@@ -118,6 +118,7 @@ const PaymentScreen = ({ navigation, route }) => {
 
         try {
             const db = getDatabase();
+            db.persistenceEnabled = true;
             const bookingsRef = ref(db, 'tbl_booking');
 
             // Fetch existing bookings to determine the next key

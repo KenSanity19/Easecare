@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 10,
-        backgroundColor: "#FFD700", // Added yellow background
+        backgroundColor: "#FFD700", 
         marginBottom: 20,
         alignItems: "center",
     },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 20,
-        zIndex: 1, // Ensure the "BOOK NOW" button is above other content
+        zIndex: 1, 
     },
     bookButtonText: {
         color: "#fff",
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#555",
     },
-    additionalImages: { // New styles for images under the Book Now button
+    additionalImages: { 
         flexDirection: "row",
         justifyContent: "space-evenly",
         marginTop: 20,
@@ -154,15 +154,15 @@ const styles = StyleSheet.create({
         borderRadius: 30,
     },
     bottomImage: {
-        position: "absolute", // Sticks the image to a specific position
-        bottom: -210,            // Keep it aligned to the bottom
-        marginTop: 60,     // Push the image slightly upward
-        left: -20,          // Slightly move to the left
-        width: "110%",        // Cover the full width of the screen
-        height: height * 0.5, // Cover 30% of the screen height (adjust as needed)
-        resizeMode: "cover",  // Ensure the image proportionally fills its container
-        zIndex: -10,           // Ensure it's behind other content
-      },
+        position: "absolute", 
+        bottom: -210,            
+        marginTop: 60,    
+        left: -20,          
+        width: "110%",       
+        height: height * 0.5, 
+        resizeMode: "cover",  
+        zIndex: -10,         
+    },
     
 });
 

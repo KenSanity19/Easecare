@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       borderRadius: 8,
       alignItems: "center",
+      zIndex: 3,
     },
     buttonText: {
       color: "#fff",

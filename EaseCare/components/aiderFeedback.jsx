@@ -100,6 +100,7 @@ const AiderFeedbackScreen = ({ route, navigation }) => {
 
     try {
       const db = getDatabase();
+      db.persistenceEnabled = true;
       const feedbackRef = ref(db, "tbl_aider_feedback");
 
       // Fetch existing feedback entries to determine the next available ID

@@ -39,7 +39,7 @@ const FeedbackScreen = ({ navigation }) => {
         return;
       }
 
-      const userEmail = user.email; // Get the logged-in user's email
+      const userEmail = user.email;
       const dbRef = ref(getDatabase());
 
       try {
@@ -50,7 +50,7 @@ const FeedbackScreen = ({ navigation }) => {
 
           // Find the user record matching the email
           const userEntry = Object.entries(customers).find(
-            ([key, customer]) => customer.username === userEmail
+            ([key, customer]) => customer.email === userEmail
           );
 
           if (userEntry) {
@@ -86,6 +86,7 @@ const FeedbackScreen = ({ navigation }) => {
 
     try {
       const db = getDatabase();
+      db.persistenceEnabled = true;
       const feedbackRef = ref(db, "tbl_app_feedback"); // Save to tbl_app_feedback
 
       const newFeedback = {
@@ -165,6 +166,7 @@ const FeedbackScreen = ({ navigation }) => {
           ))}
         </View>
       </View>
+
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>SUBMIT FEEDBACK</Text>
         </TouchableOpacity>
