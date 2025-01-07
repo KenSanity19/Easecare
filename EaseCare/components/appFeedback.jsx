@@ -102,8 +102,6 @@ const FeedbackScreen = ({ navigation }) => {
       };
 
       await push(feedbackRef, newFeedback);
-
-      Alert.alert("Feedback Submitted", "Thank you for your feedback!");
       navigation.navigate("FeedbackSuccessScreen");
     } catch (error) {
       console.error("Error submitting feedback: ", error);
